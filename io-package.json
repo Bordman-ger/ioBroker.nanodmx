@@ -16,18 +16,18 @@
 				"zh-cn": "首次出版"
 			}
 		},
-		"title": "NanoDMX2",
+		"title": "NonoDMX2",
 		"titleLang": {
-			"en": "NanoDMX2",
-			"de": "NanoDMX2",
-			"ru": "NanoDMX2",
-			"pt": "NanoDMX2",
-			"nl": "NanoDMX2",
-			"fr": "NanoDMX2",
-			"it": "NanoDMX2",
-			"es": "NanoDMX2",
-			"pl": "NanoDMX2",
-			"zh-cn": "NanoDMX2"
+			"en": "NonoDMX2",
+			"de": "NonoDMX2",
+			"ru": "NonoDMX2",
+			"pt": "NonoDMX2",
+			"nl": "NonoDMX2",
+			"fr": "NonoDMX2",
+			"it": "NonoDMX2",
+			"es": "NonoDMX2",
+			"pl": "NonoDMX2",
+			"zh-cn": "诺诺DMX2"
 		},
 		"desc": {
 			"en": "NanoDMX",
@@ -39,17 +39,20 @@
 			"it": "NanoDMX",
 			"es": "NanoDMX",
 			"pl": "NanoDMX",
-			"zh-cn": "NanoDMX"
+			"zh-cn": "纳米DMX"
 		},
 		"authors": [
-			"Boardman-ger <boardman@selzer-schoeneck.de>"
+			"Boardman-ger <Boardman@selzer-schoeneck.de>"
 		],
 		"keywords": [
-			"DMX"
+			"ioBroker",
+			"template",
+			"Smart Home",
+			"home automation"
 		],
 		"license": "MIT",
 		"platform": "Javascript/Node.js",
-		"main": "main.js",
+		"main": "build/main.js",
 		"icon": "nanodmx2.png",
 		"enabled": true,
 		"extIcon": "https://raw.githubusercontent.com/Boardman-ger/ioBroker.nanodmx2/master/admin/nanodmx2.png",

@@ -16,13 +16,17 @@ appveyor.yml
 .travis.yaml
 appveyor.yaml
 
-# Type checking configuration
+# TypeScript sources and project configuration
+src/
 tsconfig.json
 tsconfig.*.json
 
 # ESLint configuration
 .eslintrc.json
 .eslintrc.js
+
+# Sourcemaps
+maps/
 
 # npm package files
 iobroker.*.tgz

@@ -1,11 +1,8 @@
 {
 	"cli": true,
 	"adapterName": "nanodmx2",
-	"title": "NanoDMX2",
+	"title": "NonoDMX2",
 	"description": "NanoDMX",
-	"keywords": [
-		"DMX"
-	],
 	"expert": "no",
 	"features": [
 		"adapter"
@@ -16,17 +13,17 @@
 	"connectionType": "local",
 	"dataSource": "poll",
 	"connectionIndicator": "no",
-	"language": "JavaScript",
+	"language": "TypeScript",
+	"adminReact": "no",
 	"tools": [
-		"ESLint",
-		"type checking"
+		"ESLint"
 	],
 	"indentation": "Tab",
 	"quotes": "double",
 	"es6class": "yes",
 	"authorName": "Boardman-ger",
 	"authorGithub": "Boardman-ger",
-	"authorEmail": "boardman@selzer-schoeneck.de",
+	"authorEmail": "Boardman@selzer-schoeneck.de",
 	"gitRemoteProtocol": "HTTPS",
 	"gitCommit": "no",
 	"license": "MIT License",
