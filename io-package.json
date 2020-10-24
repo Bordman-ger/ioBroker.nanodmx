@@ -1,0 +1,76 @@
+{
+	"common": {
+		"name": "nanodmx2",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "NanoDMX2",
+		"titleLang": {
+			"en": "NanoDMX2",
+			"de": "NanoDMX2",
+			"ru": "NanoDMX2",
+			"pt": "NanoDMX2",
+			"nl": "NanoDMX2",
+			"fr": "NanoDMX2",
+			"it": "NanoDMX2",
+			"es": "NanoDMX2",
+			"pl": "NanoDMX2",
+			"zh-cn": "NanoDMX2"
+		},
+		"desc": {
+			"en": "NanoDMX",
+			"de": "NanoDMX",
+			"ru": "NanoDMX",
+			"pt": "NanoDMX",
+			"nl": "NanoDMX",
+			"fr": "NanoDMX",
+			"it": "NanoDMX",
+			"es": "NanoDMX",
+			"pl": "NanoDMX",
+			"zh-cn": "NanoDMX"
+		},
+		"authors": [
+			"Boardman-ger <boardman@selzer-schoeneck.de>"
+		],
+		"keywords": [
+			"DMX"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "nanodmx2.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/Boardman-ger/ioBroker.nanodmx2/master/admin/nanodmx2.png",
+		"readme": "https://github.com/Boardman-ger/ioBroker.nanodmx2/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "lighting",
+		"compact": true,
+		"connectionType": "local",
+		"dataSource": "poll",
+		"materialize": true,
+		"dependencies": [
+			{
+				"js-controller": ">=2.0.0"
+			}
+		]
+	},
+	"native": {
+		"option1": true,
+		"option2": "42"
+	},
+	"objects": [],
+	"instanceObjects": []
+}
