@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0",
-    "dmx": "^0.0.6"
+    "dmx": "^0.2.4",
+    "serialport": "^8.0.5"
   },
   "devDependencies": {
     "@iobroker/testing": "^2.3.0",
@@ -51,7 +52,7 @@
   "main": "build/main.js",
   "scripts": {
     "prebuild": "rimraf ./build",
-    "build:ts": "tsc -p tsconfig.json",
+    "build:ts": "tsc -p tsconfig.build.json",
     "build": "npm run build:ts",
     "watch:ts": "tsc -p tsconfig.json --watch",
     "watch": "npm run watch:ts",

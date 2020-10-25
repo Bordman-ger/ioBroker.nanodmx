@@ -9,18 +9,17 @@ import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
 // import * as fs from "fs";
 
-import DMX from "./index";
-// import * as DMX from "./index";
-
-const dmx = new DMX(null);
-
+// Augment the adapter.config object with the actual types
+// TODO: delete this in the next version
 declare global {
 	// eslint-disable-next-line @typescript-eslint/no-namespace
 	namespace ioBroker {
 		interface AdapterConfig {
 			// Define the shape of your options here (recommended)
-			device: string;
-			test: number;
+			option1: boolean;
+			option2: string;
+			// Or use a catch-all approachn
+			[key: string]: any;
 		}
 	}
 }
@@ -45,15 +44,10 @@ class Nanodmx2 extends utils.Adapter {
 	private async onReady(): Promise<void> {
 		// Initialize your adapter here
 
-		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
-		// const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
-		// const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-		const universe = dmx.addUniverse('myusb', 'dmx4all', this.config.device, 'null');
-
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info("config option1: " + this.config.device);
-		this.log.info("config option2: " + this.config.test);
+		this.log.info("config option1: " + this.config.option1);
+		this.log.info("config option2: " + this.config.option2);
 
 		/*
 		For every state in the system there has to be also an object of type state
@@ -72,28 +66,8 @@ class Nanodmx2 extends utils.Adapter {
 			native: {},
 		});
 
-		
-
-
-// dmx.update(universe, channels[, extraData])
-universe.update({1: 1, 2: 0});
-universe.update({16: 1, 17: 255});
-universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
-let on = false;
-
-setInterval(() => {
-  if (on) {
-    on = false;
-    universe.updateAll(0);
-    console.log('off');
-  } else {
-    on = true;
-    universe.updateAll(250);
-    console.log('on');
-  }
-}, 1000);
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-	// this.subscribeStates("testVariable");
+		this.subscribeStates("testVariable");
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates("lights.*");
 		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
@@ -113,12 +87,12 @@ setInterval(() => {
 		// same thing, but the state is deleted after 30s (getState will return null afterwards)
 		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
 
-		// // examples for the checkPassword/checkGroup functions
-		// let result = await this.checkPasswordAsync("admin", "iobroker");
-		// this.log.info("check user admin pw iobroker: " + result);
+		// examples for the checkPassword/checkGroup functions
+		let result = await this.checkPasswordAsync("admin", "iobroker");
+		this.log.info("check user admin pw iobroker: " + result);
 
-		// result = await this.checkGroupAsync("admin", "admin");
-		// this.log.info("check group user admin group admin: " + result);
+		result = await this.checkGroupAsync("admin", "admin");
+		this.log.info("check group user admin group admin: " + result);
 	}
 
 	/**
