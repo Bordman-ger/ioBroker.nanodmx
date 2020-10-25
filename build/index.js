@@ -15,7 +15,7 @@ class DMX {
         this.universes = {};
         this.drivers = {};
         this.devices = Object.assign({}, require('./devices'), devices);
-        this.animation = require('./anim');
+        // this.animation = require('./anim');
         this.registerDriver('null', require('./drivers/null'));
         // erDriver('socketio', require('./drivers/socketio'));
         this.registerDriver('dmx4all', require('./drivers/dmx4all'));
