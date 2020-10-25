@@ -26,9 +26,9 @@ const EventEmitter = require('events').EventEmitter;
     this.devices = Object.assign({}, require('./devices'), devices);
     // this.animation = require('./anim');
 
-    this.registerDriver('null', require('./drivers/null'));
+    this.registerDriver('null', require('./drivers/null.js'));
     // erDriver('socketio', require('./drivers/socketio'));
-    this.registerDriver('dmx4all', require('./drivers/dmx4all'));
+    this.registerDriver('dmx4all', require('./drivers/dmx4all.js'));
     // this.registerDriver('enttec-usb-dmx-pro', require('./drivers/enttec-usb-dmx-pro'));
     // this.registerDriver('enttec-open-usb-dmx', require('./drivers/enttec-open-usb-dmx'));
     // this.registerDriver('dmxking-ultra-dmx-pro', require('./drivers/dmxking-ultra-dmx-pro'));
