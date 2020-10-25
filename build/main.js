@@ -49,6 +49,7 @@ class Nanodmx2 extends utils.Adapter {
      * Is called when databases are connected and adapter received configuration.
      */
     async onReady() {
+        this.log.info(`Adapter state Ready`);
         // Initialize your adapter here
         // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
         // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});

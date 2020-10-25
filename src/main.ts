@@ -43,6 +43,8 @@ class Nanodmx2 extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	private async onReady(): Promise<void> {
+		this.log.info(`Adapter state Ready`);
+	
 		// Initialize your adapter here
 
 		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
@@ -75,25 +77,25 @@ class Nanodmx2 extends utils.Adapter {
 		
 
 
-// dmx.update(universe, channels[, extraData])
-universe.update({1: 1, 2: 0});
-universe.update({16: 1, 17: 255});
-universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
-let on = false;
+		// dmx.update(universe, channels[, extraData])
+		universe.update({1: 1, 2: 0});
+		universe.update({16: 1, 17: 255});
+		universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
+		let on = false;
 
-setInterval(() => {
-  if (on) {
-    on = false;
-    universe.updateAll(0);
-    console.log('off');
-  } else {
-    on = true;
-    universe.updateAll(250);
-    console.log('on');
-  }
-}, 1000);
+		setInterval(() => {
+		if (on) {
+			on = false;
+			universe.updateAll(0);
+			console.log('off');
+		} else {
+			on = true;
+			universe.updateAll(250);
+			console.log('on');
+		}
+		}, 1000);
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-	// this.subscribeStates("testVariable");
+		// this.subscribeStates("testVariable");
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates("lights.*");
 		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
