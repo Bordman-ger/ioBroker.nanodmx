@@ -9,7 +9,7 @@ import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
 // import * as fs from "fs";
 
-import DMX from "../parken/index";
+import DMX from "./index";
 // import * as DMX from "./index";
 
 const dmx = new DMX(null);
@@ -50,7 +50,7 @@ class Nanodmx2 extends utils.Adapter {
 		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 		// const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
 		// const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-		const universe = dmx.addUniverse('myusb', 'dmx4all', this.config.device, 'null');
+		const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/ttyACM0', 'null');
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
@@ -159,6 +159,7 @@ class Nanodmx2 extends utils.Adapter {
 	 * Is called if a subscribed state changes
 	 */
 	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
+		this.log.info(`Adapter state change`);
 		if (state) {
 			// The state was changed
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);

@@ -42,7 +42,7 @@
     "include": [
                 "src/**/*.ts",
         		"admin/**/*.ts",
-        		"admin/**/*.tsx", "parken/index.ts"
+        		"admin/**/*.tsx"
     ],
     "exclude": ["build/**", "node_modules/**", "admin/**"]
 }

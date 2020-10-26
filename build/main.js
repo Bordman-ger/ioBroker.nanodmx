@@ -30,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const utils = __importStar(require("@iobroker/adapter-core"));
 // Load your modules here, e.g.:
 // import * as fs from "fs";
-const index_1 = __importDefault(require("../parken/index"));
+const index_1 = __importDefault(require("./index"));
 // import * as DMX from "./index";
 const dmx = new index_1.default(null);
 class Nanodmx2 extends utils.Adapter {
@@ -54,7 +54,7 @@ class Nanodmx2 extends utils.Adapter {
         // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
         // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
         // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-        const universe = dmx.addUniverse('myusb', 'dmx4all', this.config.device, 'null');
+        const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/ttyACM0', 'null');
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
         this.log.info("config option1: " + this.config.device);
@@ -149,6 +149,7 @@ class Nanodmx2 extends utils.Adapter {
      * Is called if a subscribed state changes
      */
     onStateChange(id, state) {
+        this.log.info(`Adapter state change`);
         if (state) {
             // The state was changed
             this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
