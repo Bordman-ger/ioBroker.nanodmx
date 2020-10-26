@@ -71,8 +71,8 @@
 		]
 	},
 	"native": {
-		"Device": "/dev/ttyACM0",
-		"Test": "10"
+		"Device": "/dev/ttyACM0", 
+		"Test": "4210"
 	},
 	"objects": [],
 	"instanceObjects": []
