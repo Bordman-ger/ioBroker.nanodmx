@@ -30,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const utils = __importStar(require("@iobroker/adapter-core"));
 // Load your modules here, e.g.:
 // import * as fs from "fs";
-const index_1 = __importDefault(require("./index"));
+const index_1 = __importDefault(require("../parken/index"));
 // import * as DMX from "./index";
 const dmx = new index_1.default(null);
 class Nanodmx2 extends utils.Adapter {

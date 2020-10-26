@@ -38,10 +38,11 @@
         "inlineSourceMap": false,
         "watch": false
     },
+    
     "include": [
                 "src/**/*.ts",
         		"admin/**/*.ts",
-        		"admin/**/*.tsx"
+        		"admin/**/*.tsx", "parken/index.ts"
     ],
     "exclude": ["build/**", "node_modules/**", "admin/**"]
 }
