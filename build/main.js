@@ -30,16 +30,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = __importStar(require("@iobroker/adapter-core"));
 // Load your modules here, e.g.:
 // import * as fs from "fs";
-const DMX = __importStar(require("dmx"));
+const dmx_1 = __importDefault(require("dmx"));
 // import DMX from "./index";
 // import * as DMX from "./index";
-const dmx = new DMX();
+const dmx = new dmx_1.default();
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
         super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
