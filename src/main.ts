@@ -8,8 +8,8 @@ import * as utils from "@iobroker/adapter-core";
 
 // Load your modules here, e.g.:
 // import * as fs from "fs";
-
-import DMX from "./index";
+import * as dmxutils from "dmx";
+// import DMX from "./index";
 // import * as DMX from "./index";
 
 const dmx = new DMX(null);
