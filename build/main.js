@@ -40,10 +40,13 @@ class Nanodmx2 extends utils.Adapter {
             name: "nanodmx2",
         });
         this.on("ready", this.onReady.bind(this));
+        this.log.info(`Adapter state Ready`);
         this.on("stateChange", this.onStateChange.bind(this));
+        this.log.info(`Adapter state Change`);
         // this.on("objectChange", this.onObjectChange.bind(this));
         // this.on("message", this.onMessage.bind(this));
         this.on("unload", this.onUnload.bind(this));
+        this.log.info(`Adapter state bind`);
     }
     /**
      * Is called when databases are connected and adapter received configuration.
