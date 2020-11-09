@@ -12,7 +12,7 @@ import * as DMX from "dmx";
 // import DMX from "./index";
 // import * as DMX from "./index";
 
-const dmx = new DMX(null);
+const dmx = new DMX();
 
 
 declare global {

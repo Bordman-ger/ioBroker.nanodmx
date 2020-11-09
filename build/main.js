@@ -39,7 +39,7 @@ const utils = __importStar(require("@iobroker/adapter-core"));
 const DMX = __importStar(require("dmx"));
 // import DMX from "./index";
 // import * as DMX from "./index";
-const dmx = new DMX(null);
+const dmx = new DMX();
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
         super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
