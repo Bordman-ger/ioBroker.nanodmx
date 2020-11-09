@@ -1,4 +1,4 @@
-declare module 'dmx';
+declare module "dmx";
 // declare class DMX {
 //     constructor (options:any);
 //         const opt = options || {};
