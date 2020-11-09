@@ -26,12 +26,12 @@ declare global {
 	}
 }
 
-class Nanodmx2 extends utils.Adapter {
+class nanodmx extends utils.Adapter {
 
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
-			name: "nanodmx2",
+			name: "nanodmx",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.log.info(`Adapter state Ready`);
@@ -194,8 +194,8 @@ class Nanodmx2 extends utils.Adapter {
 
 if (require.main) {
 	// Export the constructor in compact mode
-	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new Nanodmx2(options);
+	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new nanodmx(options);
 } else {
 	// otherwise start the instance directly
-	(() => new Nanodmx2())();
+	(() => new nanodmx())();
 }

@@ -1,7 +1,7 @@
 {
 	"cli": true,
-	"adapterName": "nanodmx2",
-	"title": "NonoDMX2",
+	"adapterName": "nanodmx",
+	"title": "NonoDMX",
 	"description": "NanoDMX",
 	"expert": "no",
 	"features": [

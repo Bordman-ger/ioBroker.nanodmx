@@ -1,6 +1,6 @@
 {
 	"common": {
-		"name": "nanodmx2",
+		"name": "nanodmx",
 		"version": "0.0.1",
 		"news": {
 			"0.0.1": {
@@ -16,18 +16,18 @@
 				"zh-cn": "首次出版"
 			}
 		},
-		"title": "NonoDMX2",
+		"title": "NonoDMX",
 		"titleLang": {
-			"en": "NonoDMX2",
-			"de": "NonoDMX2",
-			"ru": "NonoDMX2",
-			"pt": "NonoDMX2",
-			"nl": "NonoDMX2",
-			"fr": "NonoDMX2",
-			"it": "NonoDMX2",
-			"es": "NonoDMX2",
-			"pl": "NonoDMX2",
-			"zh-cn": "诺诺DMX2"
+			"en": "NonoDMX",
+			"de": "NonoDMX",
+			"ru": "NonoDMX",
+			"pt": "NonoDMX",
+			"nl": "NonoDMX",
+			"fr": "NonoDMX",
+			"it": "NonoDMX",
+			"es": "NonoDMX",
+			"pl": "NonoDMX",
+			"zh-cn": "诺诺DMX"
 		},
 		"desc": {
 			"en": "NanoDMX",
@@ -53,10 +53,10 @@
 		"license": "MIT",
 		"platform": "Javascript/Node.js",
 		"main": "build/main.js",
-		"icon": "nanodmx2.png",
+		"icon": "nanodmx.png",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/Boardman-ger/ioBroker.nanodmx2/master/admin/nanodmx2.png",
-		"readme": "https://github.com/Boardman-ger/ioBroker.nanodmx2/blob/master/README.md",
+		"extIcon": "https://raw.githubusercontent.com/Boardman-ger/ioBroker.nanodmx/master/admin/nanodmx.png",
+		"readme": "https://github.com/Boardman-ger/ioBroker.nanodmx/blob/master/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
 		"type": "lighting",

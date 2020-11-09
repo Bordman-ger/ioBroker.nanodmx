@@ -1,18 +1,18 @@
-![Logo](admin/nanodmx2.png)
-# ioBroker.nanodmx2
+![Logo](admin/nanodmx.png)
+# ioBroker.nanodmx
 
-[![NPM version](http://img.shields.io/npm/v/iobroker.nanodmx2.svg)](https://www.npmjs.com/package/iobroker.nanodmx2)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.nanodmx2.svg)](https://www.npmjs.com/package/iobroker.nanodmx2)
-![Number of Installations (latest)](http://iobroker.live/badges/nanodmx2-installed.svg)
-![Number of Installations (stable)](http://iobroker.live/badges/nanodmx2-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Boardman-ger/iobroker.nanodmx2.svg)](https://david-dm.org/Boardman-ger/iobroker.nanodmx2)
-[![Known Vulnerabilities](https://snyk.io/test/github/Boardman-ger/ioBroker.nanodmx2/badge.svg)](https://snyk.io/test/github/Boardman-ger/ioBroker.nanodmx2)
+[![NPM version](http://img.shields.io/npm/v/iobroker.nanodmx.svg)](https://www.npmjs.com/package/iobroker.nanodmx)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.nanodmx.svg)](https://www.npmjs.com/package/iobroker.nanodmx)
+![Number of Installations (latest)](http://iobroker.live/badges/nanodmx-installed.svg)
+![Number of Installations (stable)](http://iobroker.live/badges/nanodmx-stable.svg)
+[![Dependency Status](https://img.shields.io/david/Boardman-ger/iobroker.nanodmx.svg)](https://david-dm.org/Boardman-ger/iobroker.nanodmx)
+[![Known Vulnerabilities](https://snyk.io/test/github/Boardman-ger/ioBroker.nanodmx/badge.svg)](https://snyk.io/test/github/Boardman-ger/ioBroker.nanodmx)
 
-[![NPM](https://nodei.co/npm/iobroker.nanodmx2.png?downloads=true)](https://nodei.co/npm/iobroker.nanodmx2/)
+[![NPM](https://nodei.co/npm/iobroker.nanodmx.png?downloads=true)](https://nodei.co/npm/iobroker.nanodmx/)
 
-**Tests:** ![Test and Release](https://github.com/Boardman-ger/ioBroker.nanodmx2/workflows/Test%20and%20Release/badge.svg)
+**Tests:** ![Test and Release](https://github.com/Boardman-ger/ioBroker.nanodmx/workflows/Test%20and%20Release/badge.svg)
 
-## nanodmx2 adapter for ioBroker
+## nanodmx adapter for ioBroker
 
 NanoDMX
 
@@ -22,7 +22,7 @@ This section is intended for the developer. It can be deleted later
 ### Getting started
 
 You are almost done, only a few steps left:
-1. Create a new repository on GitHub with the name `ioBroker.nanodmx2`
+1. Create a new repository on GitHub with the name `ioBroker.nanodmx`
 1. Initialize the current folder as a new git repository:  
 	```bash
 	git init
@@ -31,7 +31,7 @@ You are almost done, only a few steps left:
 	```
 1. Link your local repository with the one on GitHub:  
 	```bash
-	git remote add origin https://github.com/Boardman-ger/ioBroker.nanodmx2
+	git remote add origin https://github.com/Boardman-ger/ioBroker.nanodmx
 	```
 
 1. Push all files to the GitHub repo:  
@@ -91,8 +91,8 @@ In order to install the adapter locally without publishing, the following steps 
 	```
 
 For later updates, the above procedure is not necessary. Just do the following:
-1. Overwrite the changed files in the adapter directory (`/opt/iobroker/node_modules/iobroker.nanodmx2`)
-1. Execute `iobroker upload nanodmx2` on the ioBroker host
+1. Overwrite the changed files in the adapter directory (`/opt/iobroker/node_modules/iobroker.nanodmx`)
+1. Execute `iobroker upload nanodmx` on the ioBroker host
 
 ## Changelog
 

@@ -2,17 +2,17 @@
 "use strict";
 
 systemDictionary = {
-	"nanodmx2 adapter settings": {
-		"en": "Adapter settings for nanodmx2",
-		"de": "Adaptereinstellungen für nanodmx2",
-		"ru": "Настройки адаптера для nanodmx2",
-		"pt": "Configurações do adaptador para nanodmx2",
-		"nl": "Adapterinstellingen voor nanodmx2",
-		"fr": "Paramètres d'adaptateur pour nanodmx2",
-		"it": "Impostazioni dell'adattatore per nanodmx2",
-		"es": "Ajustes del adaptador para nanodmx2",
-		"pl": "Ustawienia adaptera dla nanodmx2",
-		"zh-cn": "nanodmx2的适配器设置"
+	"nanodmx adapter settings": {
+		"en": "Adapter settings for nanodmx",
+		"de": "Adaptereinstellungen für nanodmx",
+		"ru": "Настройки адаптера для nanodmx",
+		"pt": "Configurações do adaptador para nanodmx",
+		"nl": "Adapterinstellingen voor nanodmx",
+		"fr": "Paramètres d'adaptateur pour nanodmx",
+		"it": "Impostazioni dell'adattatore per nanodmx",
+		"es": "Ajustes del adaptador para nanodmx",
+		"pl": "Ustawienia adaptera dla nanodmx",
+		"zh-cn": "nanodmx的适配器设置"
 	},
 	"option1": {
 		"en": "option1",
