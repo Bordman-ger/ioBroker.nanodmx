@@ -6,7 +6,5 @@ declare module "dmx";
 //         // universes = {};
 //         // drivers = {};
 //         // animation = require('./anim');
-
-
 //   registerDriver(name:string, module:any): void;
 // } 
