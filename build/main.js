@@ -21,6 +21,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -35,10 +44,7 @@ const index_1 = __importDefault(require("./index"));
 const dmx = new index_1.default(null);
 class Nanodmx2 extends utils.Adapter {
     constructor(options = {}) {
-        super({
-            ...options,
-            name: "nanodmx2",
-        });
+        super(Object.assign(Object.assign({}, options), { name: "nanodmx2" }));
         this.on("ready", this.onReady.bind(this));
         this.log.info(`Adapter state Ready`);
         this.on("stateChange", this.onStateChange.bind(this));
@@ -51,72 +57,74 @@ class Nanodmx2 extends utils.Adapter {
     /**
      * Is called when databases are connected and adapter received configuration.
      */
-    async onReady() {
-        this.log.info(`Adapter state Ready`);
-        // Initialize your adapter here
-        // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
-        // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
-        // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-        const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/ttyACM0', 'null');
-        // The adapters config (in the instance object everything under the attribute "native") is accessible via
-        // this.config:
-        this.log.info("config option1: " + this.config.device);
-        this.log.info("config option2: " + this.config.test);
-        /*
-        For every state in the system there has to be also an object of type state
-        Here a simple template for a boolean variable named "testVariable"
-        Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-        */
-        await this.setObjectNotExistsAsync("testVariable", {
-            type: "state",
-            common: {
-                name: "testVariable",
-                type: "boolean",
-                role: "indicator",
-                read: true,
-                write: true,
-            },
-            native: {},
+    onReady() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.log.info(`Adapter state Ready`);
+            // Initialize your adapter here
+            // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
+            // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
+            // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
+            const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/ttyACM0', 'null');
+            // The adapters config (in the instance object everything under the attribute "native") is accessible via
+            // this.config:
+            this.log.info("config option1: " + this.config.device);
+            this.log.info("config option2: " + this.config.test);
+            /*
+            For every state in the system there has to be also an object of type state
+            Here a simple template for a boolean variable named "testVariable"
+            Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
+            */
+            yield this.setObjectNotExistsAsync("testVariable", {
+                type: "state",
+                common: {
+                    name: "testVariable",
+                    type: "boolean",
+                    role: "indicator",
+                    read: true,
+                    write: true,
+                },
+                native: {},
+            });
+            // dmx.update(universe, channels[, extraData])
+            universe.update({ 1: 1, 2: 0 });
+            universe.update({ 16: 1, 17: 255 });
+            universe.update({ 1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0 });
+            let on = false;
+            setInterval(() => {
+                if (on) {
+                    on = false;
+                    universe.updateAll(0);
+                    console.log('off');
+                }
+                else {
+                    on = true;
+                    universe.updateAll(250);
+                    console.log('on');
+                }
+            }, 1000);
+            // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
+            // this.subscribeStates("testVariable");
+            // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
+            // this.subscribeStates("lights.*");
+            // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
+            // this.subscribeStates("*");
+            /*
+                setState examples
+                you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
+            */
+            // the variable testVariable is set to true as command (ack=false)
+            yield this.setStateAsync("testVariable", true);
+            // same thing, but the value is flagged "ack"
+            // ack should be always set to true if the value is received from or acknowledged from the target system
+            yield this.setStateAsync("testVariable", { val: true, ack: true });
+            // same thing, but the state is deleted after 30s (getState will return null afterwards)
+            yield this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+            // // examples for the checkPassword/checkGroup functions
+            // let result = await this.checkPasswordAsync("admin", "iobroker");
+            // this.log.info("check user admin pw iobroker: " + result);
+            // result = await this.checkGroupAsync("admin", "admin");
+            // this.log.info("check group user admin group admin: " + result);
         });
-        // dmx.update(universe, channels[, extraData])
-        universe.update({ 1: 1, 2: 0 });
-        universe.update({ 16: 1, 17: 255 });
-        universe.update({ 1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0 });
-        let on = false;
-        setInterval(() => {
-            if (on) {
-                on = false;
-                universe.updateAll(0);
-                console.log('off');
-            }
-            else {
-                on = true;
-                universe.updateAll(250);
-                console.log('on');
-            }
-        }, 1000);
-        // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-        // this.subscribeStates("testVariable");
-        // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-        // this.subscribeStates("lights.*");
-        // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-        // this.subscribeStates("*");
-        /*
-            setState examples
-            you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-        */
-        // the variable testVariable is set to true as command (ack=false)
-        await this.setStateAsync("testVariable", true);
-        // same thing, but the value is flagged "ack"
-        // ack should be always set to true if the value is received from or acknowledged from the target system
-        await this.setStateAsync("testVariable", { val: true, ack: true });
-        // same thing, but the state is deleted after 30s (getState will return null afterwards)
-        await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-        // // examples for the checkPassword/checkGroup functions
-        // let result = await this.checkPasswordAsync("admin", "iobroker");
-        // this.log.info("check user admin pw iobroker: " + result);
-        // result = await this.checkGroupAsync("admin", "admin");
-        // this.log.info("check group user admin group admin: " + result);
     }
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!

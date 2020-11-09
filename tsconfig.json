@@ -32,7 +32,7 @@
 		"types": ["node"],
 		"esModuleInterop": true,
         // Consider targetting es2017 or higher if you require the new NodeJS 8+ features
-        "target": "ES2018",
+        "target": "ES2015",
 
         "sourceMap": true,
         "inlineSourceMap": false,
