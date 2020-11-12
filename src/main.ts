@@ -72,15 +72,15 @@ export class nanodmx extends utils.Adapter {
 		universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
 		let on = false;
 		setInterval(() => {
-		if (on) {
-			on = false;
-			universe.updateAll(0);
-			console.log('off');
-		} else {
-			on = true;
-			universe.updateAll(250);
-			console.log('on');
-		}
+			if (on) {
+				on = false;
+				universe.updateAll(0);
+				console.log("'off");
+			} else {
+				on = true;
+				universe.updateAll(250);
+				console.log("on");
+			}
 		}, 1000);
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
 		// this.subscribeStates("testVariable");

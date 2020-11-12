@@ -91,12 +91,12 @@ class nanodmx extends utils.Adapter {
                 if (on) {
                     on = false;
                     universe.updateAll(0);
-                    console.log('off');
+                    console.log("'off");
                 }
                 else {
                     on = true;
                     universe.updateAll(250);
-                    console.log('on');
+                    console.log("on");
                 }
             }, 1000);
             // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
