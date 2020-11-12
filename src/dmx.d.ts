@@ -7,4 +7,4 @@ declare module "dmx";
 //         // drivers = {};
 //         // animation = require('./anim');
 //   registerDriver(name:string, module:any): void;
-// } 
+// }

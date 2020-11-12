@@ -34,14 +34,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.nanodmx = void 0;
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = __importStar(require("@iobroker/adapter-core"));
 // Load your modules here, e.g.:
 // import * as fs from "fs";
 const dmx_1 = __importDefault(require("dmx"));
-// import DMX from "./index";
-// import * as DMX from "./index";
 const dmx = new dmx_1.default();
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
@@ -62,7 +61,7 @@ class nanodmx extends utils.Adapter {
             // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
             // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
             // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-            const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/ttyACM0', 'null');
+            const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
             this.log.info("config option1: " + this.config.device);
@@ -169,6 +168,7 @@ class nanodmx extends utils.Adapter {
         }
     }
 }
+exports.nanodmx = nanodmx;
 if (require.main) {
     // Export the constructor in compact mode
     module.exports = (options) => new nanodmx(options);

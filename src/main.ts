@@ -45,7 +45,7 @@ export class nanodmx extends utils.Adapter {
 		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 		// const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
 		// const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-		const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/ttyACM0', 'null');
+		const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
 		this.log.info("config option1: " + this.config.device);
