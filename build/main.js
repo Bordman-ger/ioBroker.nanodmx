@@ -42,10 +42,7 @@ const utils = __importStar(require("@iobroker/adapter-core"));
 // import * as fs from "fs";
 const dmx_1 = __importDefault(require("dmx"));
 const dmx = new dmx_1.default();
-// export type NamedStateEventHandler = (id: string, value: any) => void;
 class nanodmx extends utils.Adapter {
-    // private cacheEvents = false;
-    // private eventsCache: Record<string, any> = {};
     constructor(options = {}) {
         super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
         this.existingObjects = {};
@@ -53,6 +50,8 @@ class nanodmx extends utils.Adapter {
         // private operatingModes: OperatingModes = {};
         this.stateChangeListeners = {};
         this.stateEventHandlers = {};
+        this.cacheEvents = false;
+        this.eventsCache = {};
         this.on("ready", this.onReady.bind(this));
         this.on("stateChange", this.onStateChange.bind(this));
         // this.on("objectChange", this.onObjectChange.bind(this));
@@ -77,8 +76,9 @@ class nanodmx extends utils.Adapter {
             this.setState('info.connection', false, true);
             this.log.info(`Adapter state Ready`);
             // Initialize your adapter here
-            this.client = new dmx();
-            this.client.dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+            this.mydmx = new dmx_1.default();
+            // this.mydmx.registerDriver(name, module)
+            this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
             // var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
             // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
             // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
@@ -87,6 +87,21 @@ class nanodmx extends utils.Adapter {
             // this.config:
             this.log.info("config option1: " + this.config.device);
             this.log.info("config option2: " + this.config.test);
+            this.mydmx.on('connect', () => {
+                this.log.info('Miniserver connected');
+            });
+            this.mydmx.on('authorized', () => {
+                this.log.debug('authorized');
+            });
+            this.mydmx.on('connection_error', (error) => {
+                this.log.error('Miniserver connection error: ' + error);
+            });
+            this.mydmx.on('close', () => {
+                this.log.info('connection closed');
+                this.setState('info.connection', false, true);
+            });
+            // we are ready, let's set the connection indicator
+            this.setState('info.connection', true, true);
             /*
             For every state in the system there has to be also an object of type state
             Here a simple template for a boolean variable named "testVariable"
@@ -103,23 +118,33 @@ class nanodmx extends utils.Adapter {
                 },
                 native: {},
             });
+            const handleAnyEvent = (uuid, evt) => {
+                this.log.silly(`received update event: ${JSON.stringify(evt)}: ${uuid}`);
+                this.handleEvent(uuid, evt);
+            };
+            this.mydmx.on('update_event_value', handleAnyEvent);
+            this.mydmx.on('update_event_text', handleAnyEvent);
+            this.mydmx.on('update_event_daytimer', handleAnyEvent);
+            this.mydmx.on('update_event_weather', handleAnyEvent);
+            this.cacheEvents = true;
+            this.mydmx.connect();
+            this.subscribeStates('*');
             // dmx.update(universe, channels[, extraData])
-            this.client.dmx.universe.update({ 1: 1, 2: 0 });
-            this.client.dmx.universe.update({ 16: 1, 17: 255 });
-            this.client.dmx.universe.update({ 1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0 });
-            let on = false;
-            setInterval(() => {
-                if (on) {
-                    on = false;
-                    this.client.dmx.universe.updateAll(0);
-                    console.log("'off");
-                }
-                else {
-                    on = true;
-                    this.client.dmx.universe.updateAll(250);
-                    console.log("on");
-                }
-            }, 1000);
+            this.mydmx.update({ 1: 1, 2: 0 });
+            // this.mydmx.dmx.universe.update({16: 1, 17: 255});
+            // this.mydmx.dmx.universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
+            // let on = false;
+            // setInterval(() => {
+            // 	if (on) {
+            // 		on = false;
+            // 		this.mydmx.dmx.universe.updateAll(0);
+            // 		console.log("'off");
+            // 	} else {
+            // 		on = true;
+            // 		this.mydmx.dmx.universe.updateAll(250);
+            // 		console.log("on");
+            // 	}
+            // }, 1000);
             // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
             // this.subscribeStates("testVariable");
             // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
@@ -178,15 +203,139 @@ class nanodmx extends utils.Adapter {
      * Is called if a subscribed state changes
      */
     onStateChange(id, state) {
-        this.log.info(`Adapter state change`);
-        if (state) {
-            // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+        // this.log.info(`Adapter state change`);
+        // if (state) {
+        // 	// The state was changed
+        // 	this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+        // } else {
+        // 	// The state was deleted
+        // 	this.log.info(`state ${id} deleted`);
+        // }
+        if (!id || !state || state.ack) {
+            return;
         }
-        else {
-            // The state was deleted
-            this.log.info(`state ${id} deleted`);
+        this.log.silly(`stateChange ${id} ${JSON.stringify(state)}`);
+        if (!this.stateChangeListeners.hasOwnProperty(id)) {
+            this.log.error('Unsupported state change: ' + id);
+            return;
         }
+        this.stateChangeListeners[id](this.currentStateValues[id], state.val);
+    }
+    // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
+    // /**
+    //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
+    //  * Using this method requires "common.message" property to be set to true in io-package.json
+    //  */
+    // private onMessage(obj: ioBroker.Message): void {
+    // 	if (typeof obj === "object" && obj.message) {
+    // 		if (obj.command === "send") {
+    // 			// e.g. send email or pushover or whatever
+    // 			this.log.info("send command");
+    // 			// Send response in callback if required
+    // 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
+    // 		}
+    // 	}
+    // }
+    handleEvent(uuid, evt) {
+        if (this.cacheEvents) {
+            this.eventsCache[uuid] = evt;
+            return;
+        }
+        const stateEventHandlerList = this.stateEventHandlers[uuid];
+        if (stateEventHandlerList === undefined) {
+            this.log.debug('Unknown event UUID: ' + uuid);
+            return;
+        }
+        stateEventHandlerList.forEach((item) => {
+            try {
+                item.handler(evt);
+            }
+            catch (e) {
+                this.log.error(`Error while handling event UUID ${uuid}: ${e}`);
+            }
+        });
+    }
+    sendCommand(uuid, action) {
+        this.mydmx.send_cmd(uuid, action);
+    }
+    updateObjectAsync(id, obj) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const fullId = this.namespace + '.' + id;
+            if (this.existingObjects.hasOwnProperty(fullId)) {
+                const existingObject = this.existingObjects[fullId];
+                // if (!this.config.syncNames && obj.common) {
+                //     obj.common.name = existingObject.common.name;
+                // }
+                /* TODO: re-add:
+                if (obj.common.smartName != 'ignore' && existingObject.common.smartName != 'ignore') {
+                    // keep the smartName (if it's not supposed to be ignored)
+                    obj.common.smartName = existingObject.common.smartName;
+                }*/
+            }
+            yield this.extendObjectAsync(id, obj);
+        });
+    }
+    updateStateObjectAsync(id, commonInfo, stateUuid, stateEventHandler) {
+        return __awaiter(this, void 0, void 0, function* () {
+            /* TODO: re-add:
+            if (commonInfo.hasOwnProperty('smartIgnore')) {
+                // interpret smartIgnore (our own extension of common) to generate smartName if needed
+                if (commonInfo.smartIgnore) {
+                    commonInfo.smartName = 'ignore';
+                } else if (!commonInfo.hasOwnProperty('smartName')) {
+                    commonInfo.smartName = null;
+                }
+                delete commonInfo.smartIgnore;
+            }*/
+            const obj = {
+                type: 'state',
+                common: commonInfo,
+                native: {
+                    uuid: stateUuid,
+                },
+            };
+            yield this.updateObjectAsync(id, obj);
+            if (stateEventHandler) {
+                this.addStateEventHandler(stateUuid, (value) => {
+                    stateEventHandler(id, value);
+                });
+            }
+        });
+    }
+    addStateEventHandler(uuid, eventHandler, name) {
+        if (this.stateEventHandlers[uuid] === undefined) {
+            this.stateEventHandlers[uuid] = [];
+        }
+        if (name) {
+            this.removeStateEventHandler(uuid, name);
+        }
+        this.stateEventHandlers[uuid].push({ name: name, handler: eventHandler });
+    }
+    removeStateEventHandler(uuid, name) {
+        if (this.stateEventHandlers[uuid] === undefined || !name) {
+            return false;
+        }
+        let found = false;
+        for (let i = 0; i < this.stateEventHandlers[uuid].length; i++) {
+            if (this.stateEventHandlers[uuid][i].name === name) {
+                this.stateEventHandlers[uuid].splice(i, 1);
+                found = true;
+            }
+        }
+        return found;
+    }
+    addStateChangeListener(id, listener) {
+        this.stateChangeListeners[this.namespace + '.' + id] = listener;
+    }
+    setStateAck(id, value) {
+        this.currentStateValues[this.namespace + '.' + id] = value;
+        this.setState(id, { val: value, ack: true });
+    }
+    getCachedStateValue(id) {
+        if (this.currentStateValues.hasOwnProperty(id)) {
+            return this.currentStateValues[id];
+        }
+        return undefined;
     }
 }
 exports.nanodmx = nanodmx;
