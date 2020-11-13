@@ -21,9 +21,28 @@ declare global {
 		}
 	}
 }
+export type FlatStateValue = string | number | boolean;
+export type StateValue = FlatStateValue | any[] | Record<string, any>;
+
+export type OldStateValue = StateValue | null | undefined;
+export type CurrentStateValue = StateValue | null;
+export type StateChangeListener = (oldValue: OldStateValue, newValue: CurrentStateValue) => void;
+export type StateEventHandler = (value: any) => void;
+export type StateEventRegistration = { name?: string; handler: StateEventHandler };
+// export type NamedStateEventHandler = (id: string, value: any) => void;
+
 
 export class nanodmx extends utils.Adapter {
+	private client?: any;
+    private existingObjects: Record<string, ioBroker.Object> = {};
+    private currentStateValues: Record<string, CurrentStateValue> = {};
+	// private operatingModes: OperatingModes = {};
+	private stateChangeListeners: Record<string, StateChangeListener> = {};
+    private stateEventHandlers: Record<string, StateEventRegistration[]> = {};
 
+    // private cacheEvents = false;
+    // private eventsCache: Record<string, any> = {};
+	
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
@@ -40,12 +59,30 @@ export class nanodmx extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	private async onReady(): Promise<void> {
+		// store all current (acknowledged) state values
+        const allStates = await this.getStatesAsync('*');
+        for (const id in allStates) {
+            if (allStates[id] && allStates[id].ack) {
+                this.currentStateValues[id] = allStates[id].val;
+            }
+        }
+
+        // store all existing objects for later use
+        this.existingObjects = await this.getAdapterObjectsAsync();
+
+        // Reset the connection indicator during startup
+        this.setState('info.connection', false, true);
+
 		this.log.info(`Adapter state Ready`);
 		// Initialize your adapter here
+
+		this.client = new dmx(
+		);
+		this.client.dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
 		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 		// const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
 		// const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
-		const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+		// const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
 		this.log.info("config option1: " + this.config.device);
@@ -67,18 +104,18 @@ export class nanodmx extends utils.Adapter {
 			native: {},
 		});
 		// dmx.update(universe, channels[, extraData])
-		universe.update({1: 1, 2: 0});
-		universe.update({16: 1, 17: 255});
-		universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
+		this.client.dmx.universe.update({1: 1, 2: 0});
+		this.client.dmx.universe.update({16: 1, 17: 255});
+		this.client.dmx.universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
 		let on = false;
 		setInterval(() => {
 			if (on) {
 				on = false;
-				universe.updateAll(0);
+				this.client.dmx.universe.updateAll(0);
 				console.log("'off");
 			} else {
 				on = true;
-				universe.updateAll(250);
+				this.client.dmx.universe.updateAll(250);
 				console.log("on");
 			}
 		}, 1000);
