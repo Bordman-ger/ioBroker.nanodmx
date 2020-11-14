@@ -38,6 +38,7 @@ exports.nanodmx = void 0;
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = __importStar(require("@iobroker/adapter-core"));
+// import { GlobalStates } from './structure-file';
 const dmx_1 = __importDefault(require("dmx"));
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
@@ -61,7 +62,7 @@ class nanodmx extends utils.Adapter {
     onReady() {
         return __awaiter(this, void 0, void 0, function* () {
             // store all current (acknowledged) state values
-            const allStates = yield this.getStatesAsync('*');
+            const allStates = yield this.getStatesAsync("*");
             for (const id in allStates) {
                 if (allStates[id] && allStates[id].ack) {
                     this.currentStateValues[id] = allStates[id].val;
@@ -70,7 +71,7 @@ class nanodmx extends utils.Adapter {
             // store all existing objects for later use
             this.existingObjects = yield this.getAdapterObjectsAsync();
             // Reset the connection indicator during startup
-            this.setState('info.connection', false, true);
+            this.setState("info.connection", false, true);
             this.log.info(`Adapter state Ready`);
             // Initialize your adapter here
             this.mydmx = new dmx_1.default();
@@ -84,36 +85,36 @@ class nanodmx extends utils.Adapter {
             // this.config:
             this.log.info("config option1: " + this.config.device);
             this.log.info("config option2: " + this.config.test);
-            this.mydmx.on('connect', () => {
-                this.log.info('Miniserver connected');
+            this.mydmx.on("connect", () => {
+                this.log.info("Miniserver connected");
             });
-            this.mydmx.on('authorized', () => {
-                this.log.debug('authorized');
+            this.mydmx.on("authorized", () => {
+                this.log.debug("authorized");
             });
-            this.mydmx.on('connect_failed', () => {
-                this.log.error('Miniserver connect failed');
+            this.mydmx.on("connect_failed", () => {
+                this.log.error("Miniserver connect failed");
             });
-            this.mydmx.on('connection_error', (error) => {
-                this.log.error('Miniserver connection error: ' + error);
+            this.mydmx.on("connection_error", (error) => {
+                this.log.error("Miniserver connection error: " + error);
             });
-            this.mydmx.on('close', () => {
-                this.log.info('connection closed');
-                this.setState('info.connection', false, true);
+            this.mydmx.on("close", () => {
+                this.log.info("connection closed");
+                this.setState("info.connection", false, true);
             });
-            this.mydmx.on('send', (message) => {
-                this.log.debug('sent message: ' + message);
+            this.mydmx.on("send", (message) => {
+                this.log.debug("sent message: " + message);
             });
-            this.mydmx.on('message_text', (message) => {
-                this.log.debug('message_text ' + JSON.stringify(message));
+            this.mydmx.on("message_text", (message) => {
+                this.log.debug("message_text " + JSON.stringify(message));
             });
-            this.mydmx.on('message_file', (message) => {
-                this.log.debug('message_file ' + JSON.stringify(message));
+            this.mydmx.on("message_file", (message) => {
+                this.log.debug("message_file " + JSON.stringify(message));
             });
-            this.mydmx.on('message_invalid', (message) => {
-                this.log.debug('message_invalid ' + JSON.stringify(message));
+            this.mydmx.on("message_invalid", (message) => {
+                this.log.debug("message_invalid " + JSON.stringify(message));
             });
-            this.mydmx.on('keepalive', (time) => {
-                this.log.silly('keepalive (' + time + 'ms)');
+            this.mydmx.on("keepalive", (time) => {
+                this.log.silly("keepalive (" + time + "ms)");
             });
             // this.mydmx.on('get_structure_file', async (data: StructureFile) => {
             //     this.log.silly('get_structure_file ' + JSON.stringify(data));
@@ -128,7 +129,7 @@ class nanodmx extends utils.Adapter {
             //     }
             // });
             // we are ready, let's set the connection indicator
-            this.setState('info.connection', true, true);
+            this.setState("info.connection", true, true);
             /*
             For every state in the system there has to be also an object of type state
             Here a simple template for a boolean variable named "testVariable"
@@ -146,16 +147,16 @@ class nanodmx extends utils.Adapter {
                 native: {},
             });
             const handleAnyEvent = (uuid, evt) => {
-                this.log.silly(`received update event: ${JSON.stringify(evt)}: ${uuid}`);
+                this.log.silly("received update event: ${JSON.stringify(evt)}: ${uuid}");
                 this.handleEvent(uuid, evt);
             };
-            this.mydmx.on('update_event_value', handleAnyEvent);
-            this.mydmx.on('update_event_text', handleAnyEvent);
-            this.mydmx.on('update_event_daytimer', handleAnyEvent);
-            this.mydmx.on('update_event_weather', handleAnyEvent);
+            this.mydmx.on("update_event_value", handleAnyEvent);
+            this.mydmx.on("update_event_text", handleAnyEvent);
+            this.mydmx.on("update_event_daytimer", handleAnyEvent);
+            this.mydmx.on("update_event_weather", handleAnyEvent);
             this.cacheEvents = true;
             this.mydmx.connect();
-            this.subscribeStates('*');
+            this.subscribeStates("*");
             // dmx.update(universe, channels[, extraData])
             this.mydmx.update({ 1: 1, 2: 0 });
             // this.mydmx.dmx.universe.update({16: 1, 17: 255});
@@ -243,7 +244,7 @@ class nanodmx extends utils.Adapter {
         }
         this.log.silly(`stateChange ${id} ${JSON.stringify(state)}`);
         if (!this.stateChangeListeners.hasOwnProperty(id)) {
-            this.log.error('Unsupported state change: ' + id);
+            this.log.error("Unsupported state change: " + id);
             return;
         }
         this.stateChangeListeners[id](this.currentStateValues[id], state.val);
@@ -313,7 +314,7 @@ class nanodmx extends utils.Adapter {
     //     role: 'value',
     //     handler: this.setStateAck.bind(this),
     // },
-    // };
+    //	};
     //     const defaultInfo: GlobalStateInfo = {
     //         type: 'string',
     //         role: 'text',
@@ -326,7 +327,7 @@ class nanodmx extends utils.Adapter {
         }
         const stateEventHandlerList = this.stateEventHandlers[uuid];
         if (stateEventHandlerList === undefined) {
-            this.log.debug('Unknown event UUID: ' + uuid);
+            this.log.debug("Unknown event UUID: " + uuid);
             return;
         }
         stateEventHandlerList.forEach((item) => {
@@ -343,9 +344,9 @@ class nanodmx extends utils.Adapter {
     }
     updateObjectAsync(id, obj) {
         return __awaiter(this, void 0, void 0, function* () {
-            const fullId = this.namespace + '.' + id;
+            const fullId = this.namespace + "." + id;
             if (this.existingObjects.hasOwnProperty(fullId)) {
-                const existingObject = this.existingObjects[fullId];
+                // const existingObject = this.existingObjects[fullId];
                 // if (!this.config.syncNames && obj.common) {
                 //     obj.common.name = existingObject.common.name;
                 // }
@@ -371,7 +372,7 @@ class nanodmx extends utils.Adapter {
                 delete commonInfo.smartIgnore;
             }*/
             const obj = {
-                type: 'state',
+                type: "state",
                 common: commonInfo,
                 native: {
                     uuid: stateUuid,
@@ -408,10 +409,10 @@ class nanodmx extends utils.Adapter {
         return found;
     }
     addStateChangeListener(id, listener) {
-        this.stateChangeListeners[this.namespace + '.' + id] = listener;
+        this.stateChangeListeners[this.namespace + "." + id] = listener;
     }
     setStateAck(id, value) {
-        this.currentStateValues[this.namespace + '.' + id] = value;
+        this.currentStateValues[this.namespace + "." + id] = value;
         this.setState(id, { val: value, ack: true });
     }
     getCachedStateValue(id) {

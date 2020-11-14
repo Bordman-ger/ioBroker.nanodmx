@@ -5,7 +5,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-import { GlobalStates } from './structure-file';
+// import { GlobalStates } from './structure-file';
 import DMX from "dmx";
 // const dmx = new DMX();
 
@@ -33,15 +33,15 @@ export type NamedStateEventHandler = (id: string, value: any) => void;
 
 export class nanodmx extends utils.Adapter {
 	private mydmx?: any;
-    private existingObjects: Record<string, ioBroker.Object> = {};
-    private currentStateValues: Record<string, CurrentStateValue> = {};
+	private existingObjects: Record<string, ioBroker.Object> = {};
+	private currentStateValues: Record<string, CurrentStateValue> = {};
 	// private operatingModes: OperatingModes = {};
 	private stateChangeListeners: Record<string, StateChangeListener> = {};
-    private stateEventHandlers: Record<string, StateEventRegistration[]> = {};
+	private stateEventHandlers: Record<string, StateEventRegistration[]> = {};
 
-    private cacheEvents = false;
-    private eventsCache: Record<string, any> = {};
-	
+	private cacheEvents = false;
+	private eventsCache: Record<string, any> = {};
+
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
@@ -59,18 +59,18 @@ export class nanodmx extends utils.Adapter {
 	 */
 	private async onReady(): Promise<void> {
 		// store all current (acknowledged) state values
-        const allStates = await this.getStatesAsync('*');
-        for (const id in allStates) {
-            if (allStates[id] && allStates[id].ack) {
-                this.currentStateValues[id] = allStates[id].val;
-            }
-        }
+		const allStates = await this.getStatesAsync("*");
+		for (const id in allStates) {
+			if (allStates[id] && allStates[id].ack) {
+				this.currentStateValues[id] = allStates[id].val;
+			}
+		}
 
-        // store all existing objects for later use
-        this.existingObjects = await this.getAdapterObjectsAsync();
+		// store all existing objects for later use
+		this.existingObjects = await this.getAdapterObjectsAsync();
 
-        // Reset the connection indicator during startup
-        this.setState('info.connection', false, true);
+		// Reset the connection indicator during startup
+		this.setState("info.connection", false, true);
 
 		this.log.info(`Adapter state Ready`);
 		// Initialize your adapter here
@@ -87,59 +87,58 @@ export class nanodmx extends utils.Adapter {
 		this.log.info("config option1: " + this.config.device);
 		this.log.info("config option2: " + this.config.test);
 
-		this.mydmx.on('connect', () => {
-            this.log.info('Miniserver connected');
-        });
+		this.mydmx.on("connect", () => {
+	    this.log.info("Miniserver connected");
+    	});
 
-        this.mydmx.on('authorized', () => {
-            this.log.debug('authorized');
+    	this.mydmx.on("authorized", () => {
+	    this.log.debug("authorized");
 		});
-		this.mydmx.on('connect_failed', () => {
-            this.log.error('Miniserver connect failed');
-        });
-		this.mydmx.on('connection_error', (error: any) => {
-            this.log.error('Miniserver connection error: ' + error);
-        });
+		this.mydmx.on("connect_failed", () => {
+    	this.log.error("Miniserver connect failed");
+    	});
+		this.mydmx.on("connection_error", (error: any) => {
+    	this.log.error("Miniserver connection error: " + error);
+    	});
 
-        this.mydmx.on('close', () => {
-            this.log.info('connection closed');
-            this.setState('info.connection', false, true);
+    	this.mydmx.on("close", () => {
+    	this.log.info("connection closed");
+    	this.setState("info.connection", false, true);
 		});
-		this.mydmx.on('send', (message: any) => {
-            this.log.debug('sent message: ' + message);
-        });
-        this.mydmx.on('message_text', (message: any) => {
-            this.log.debug('message_text ' + JSON.stringify(message));
-        });
-        this.mydmx.on('message_file', (message: any) => {
-            this.log.debug('message_file ' + JSON.stringify(message));
-        });
+		this.mydmx.on("send", (message: any) => {
+	    this.log.debug("sent message: " + message);
+	    });
+	    this.mydmx.on("message_text", (message: any) => {
+	    this.log.debug("message_text " + JSON.stringify(message));
+	    });
+	    this.mydmx.on("message_file", (message: any) => {
+	   this.log.debug("message_file " + JSON.stringify(message));
+	    });
 
-        this.mydmx.on('message_invalid', (message: any) => {
-            this.log.debug('message_invalid ' + JSON.stringify(message));
-        });
-		this.mydmx.on('keepalive', (time: number) => {
-            this.log.silly('keepalive (' + time + 'ms)');
-        });
+	    this.mydmx.on("message_invalid", (message: any) => {
+			this.log.debug("message_invalid " + JSON.stringify(message));
+    	});
+		this.mydmx.on("keepalive", (time: number) => {
+	    this.log.silly("keepalive (" + time + "ms)");
+	    });
 
 		// this.mydmx.on('get_structure_file', async (data: StructureFile) => {
-        //     this.log.silly('get_structure_file ' + JSON.stringify(data));
-        //     this.log.info('got structure file; last modified on ' + data.lastModified);
+	    //     this.log.silly('get_structure_file ' + JSON.stringify(data));
+	    //     this.log.info('got structure file; last modified on ' + data.lastModified);
 
-        //     try {
-        //         await this.loadStructureFileAsync(data);
-        //         this.log.debug('structure file successfully loaded');
+	    //     try {
+	    //         await this.loadStructureFileAsync(data);
+	    //         this.log.debug('structure file successfully loaded');
 
-        //         // we are ready, let's set the connection indicator
-        //         this.setState('info.connection', true, true);
-        //     } catch (error) {
-        //         this.log.error(`Couldn't load structure file: ${error}`);
-        //     }
+	    //         // we are ready, let's set the connection indicator
+	    //         this.setState('info.connection', true, true);
+	    //     } catch (error) {
+	    //         this.log.error(`Couldn't load structure file: ${error}`);
+	    //     }
 		// });
 		     // we are ready, let's set the connection indicator
-			 this.setState('info.connection', true, true);
+			 this.setState("info.connection", true, true);
 
- 
 		/*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
@@ -158,19 +157,19 @@ export class nanodmx extends utils.Adapter {
 		});
 
 		const handleAnyEvent = (uuid: string, evt: any): void => {
-            this.log.silly(`received update event: ${JSON.stringify(evt)}: ${uuid}`);
-            this.handleEvent(uuid, evt);
-        };
+	    this.log.silly("received update event: ${JSON.stringify(evt)}: ${uuid}");
+	        this.handleEvent(uuid, evt);
+	    };
 
-		this.mydmx.on('update_event_value', handleAnyEvent);
-        this.mydmx.on('update_event_text', handleAnyEvent);
-        this.mydmx.on('update_event_daytimer', handleAnyEvent);
-        this.mydmx.on('update_event_weather', handleAnyEvent);
+		this.mydmx.on("update_event_value", handleAnyEvent);
+	    this.mydmx.on("update_event_text", handleAnyEvent);
+	    this.mydmx.on("update_event_daytimer", handleAnyEvent);
+	    this.mydmx.on("update_event_weather", handleAnyEvent);
 
-        this.cacheEvents = true;
-        this.mydmx.connect();
+	    this.cacheEvents = true;
+	    this.mydmx.connect();
 
-        this.subscribeStates('*');
+	    this.subscribeStates("*");
 
 
 
@@ -262,16 +261,16 @@ export class nanodmx extends utils.Adapter {
 		// }
 
 		if (!id || !state || state.ack) {
-            return;
-        }
+	    return;
+	    }
 
-        this.log.silly(`stateChange ${id} ${JSON.stringify(state)}`);
-        if (!this.stateChangeListeners.hasOwnProperty(id)) {
-            this.log.error('Unsupported state change: ' + id);
-            return;
-        }
+	    this.log.silly(`stateChange ${id} ${JSON.stringify(state)}`);
+	    if (!this.stateChangeListeners.hasOwnProperty(id)) {
+	        this.log.error("Unsupported state change: " + id);
+	        return;
+	    }
 
-        this.stateChangeListeners[id](this.currentStateValues[id], state.val);
+	    this.stateChangeListeners[id](this.currentStateValues[id], state.val);
 	}
 	// private async loadStructureFileAsync(data: StructureFile): Promise<void> {
 	// 	this.stateEventHandlers = {};
@@ -292,7 +291,7 @@ export class nanodmx extends utils.Adapter {
 	// 		}
 
 	// 		this.eventsCache = {};
-		
+
 	// }
 
 	// If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
@@ -312,93 +311,93 @@ export class nanodmx extends utils.Adapter {
 	// }
 
 	// private async loadGlobalStatesAsync(globalStates: GlobalStates): Promise<void> {
-    //     interface GlobalStateInfo {
-    //         type: ioBroker.CommonType;
-    //         role: string;
-    //         handler: (name: string, value: FlatStateValue) => void;
-    //     }
-    //     const globalStateInfos: Record<string, GlobalStateInfo> = {
-    //         operatingMode: {
-    //             type: 'number',
-    //             role: 'value',
-    //             handler: this.setOperatingMode.bind(this),
-    //         }
-    //         // sunrise: {
-            //     type: 'number',
-            //     role: 'value.interval',
-            //     handler: this.setStateAck.bind(this),
-            // },
-            // sunset: {
-            //     type: 'number',
-            //     role: 'value.interval',
-            //     handler: this.setStateAck.bind(this),
-            // },
-            // notifications: {
-            //     type: 'number',
-            //     role: 'value',
-            //     handler: this.setStateAck.bind(this),
-            // },
-            // modifications: {
-            //     type: 'number',
-            //     role: 'value',
-            //     handler: this.setStateAck.bind(this),
-            // },
-        // };
-    //     const defaultInfo: GlobalStateInfo = {
-    //         type: 'string',
-    //         role: 'text',
-    //         handler: this.setStateAck.bind(this),
+	//     interface GlobalStateInfo {
+	//         type: ioBroker.CommonType;
+	//         role: string;
+	//         handler: (name: string, value: FlatStateValue) => void;
+	//     }
+	//     const globalStateInfos: Record<string, GlobalStateInfo> = {
+	//         operatingMode: {
+	//             type: 'number',
+	//             role: 'value',
+	//             handler: this.setOperatingMode.bind(this),
+	//         }
+	//         // sunrise: {
+	//     type: 'number',
+	//     role: 'value.interval',
+	//     handler: this.setStateAck.bind(this),
+	// },
+	// sunset: {
+	//     type: 'number',
+	//     role: 'value.interval',
+	//     handler: this.setStateAck.bind(this),
+	// },
+	// notifications: {
+	//     type: 'number',
+	//     role: 'value',
+	//     handler: this.setStateAck.bind(this),
+	// },
+	// modifications: {
+	//     type: 'number',
+	//     role: 'value',
+	//     handler: this.setStateAck.bind(this),
+	// },
+	//	};
+	//     const defaultInfo: GlobalStateInfo = {
+	//         type: 'string',
+	//         role: 'text',
+	//         handler: this.setStateAck.bind(this),
 	// 	};
-		
+
 	private handleEvent(uuid: string, evt: any): void {
-        if (this.cacheEvents) {
-            this.eventsCache[uuid] = evt;
-            return;
-        }
+		if (this.cacheEvents) {
+			this.eventsCache[uuid] = evt;
+			return;
+		}
 
-        const stateEventHandlerList = this.stateEventHandlers[uuid];
-        if (stateEventHandlerList === undefined) {
-            this.log.debug('Unknown event UUID: ' + uuid);
-            return;
-        }
+		const stateEventHandlerList = this.stateEventHandlers[uuid];
+		if (stateEventHandlerList === undefined) {
+			this.log.debug("Unknown event UUID: " + uuid);
+			return;
+		}
 
-        stateEventHandlerList.forEach((item: StateEventRegistration) => {
-            try {
-                item.handler(evt);
-            } catch (e) {
-                this.log.error(`Error while handling event UUID ${uuid}: ${e}`);
-            }
-        });
+		stateEventHandlerList.forEach((item: StateEventRegistration) => {
+			try {
+				item.handler(evt);
+			} catch (e) {
+				this.log.error(`Error while handling event UUID ${uuid}: ${e}`);
+			}
+		});
 	}
-	
+
 	public sendCommand(uuid: string, action: string): void {
-        this.mydmx.send_cmd(uuid, action);
-    }
+		this.mydmx.send_cmd(uuid, action);
+	}
 
-    public async updateObjectAsync(id: string, obj: ioBroker.SettableObject): Promise<void> {
-        const fullId = this.namespace + '.' + id;
-        if (this.existingObjects.hasOwnProperty(fullId)) {
-            const existingObject = this.existingObjects[fullId];
-            // if (!this.config.syncNames && obj.common) {
-            //     obj.common.name = existingObject.common.name;
-            // }
-            /* TODO: re-add:
-            if (obj.common.smartName != 'ignore' && existingObject.common.smartName != 'ignore') {
-                // keep the smartName (if it's not supposed to be ignored)
-                obj.common.smartName = existingObject.common.smartName;
-            }*/
-        }
+	public async updateObjectAsync(id: string, obj: ioBroker.SettableObject): Promise<void> {
+		const fullId = this.namespace + "." + id;
+		if (this.existingObjects.hasOwnProperty(fullId)) {
+			// const existingObject = this.existingObjects[fullId];
+			// if (!this.config.syncNames && obj.common) {
+			//     obj.common.name = existingObject.common.name;
+			// }
+			/* TODO: re-add:
+			if (obj.common.smartName != 'ignore' && existingObject.common.smartName != 'ignore') {
+				// keep the smartName (if it's not supposed to be ignored)
+				obj.common.smartName = existingObject.common.smartName;
+			}*/
+		}
 
-        await this.extendObjectAsync(id, obj);
-    }
+		await this.extendObjectAsync(id, obj);
+	}
 
 	public async updateStateObjectAsync(
-        id: string,
-        commonInfo: ioBroker.StateCommon,
-        stateUuid: string,
-        stateEventHandler?: NamedStateEventHandler,
-  		): Promise<void> {
-        /* TODO: re-add:
+		id: string,
+		commonInfo: ioBroker.StateCommon,
+		stateUuid: string,
+		stateEventHandler?: NamedStateEventHandler,
+	): Promise<void> {
+		/* TODO: re-add:
         if (commonInfo.hasOwnProperty('smartIgnore')) {
             // interpret smartIgnore (our own extension of common) to generate smartName if needed
             if (commonInfo.smartIgnore) {
@@ -408,66 +407,66 @@ export class nanodmx extends utils.Adapter {
             }
             delete commonInfo.smartIgnore;
         }*/
-        const obj: ioBroker.SettableObjectWorker<ioBroker.StateObject> = {
-            type: 'state',
-            common: commonInfo,
-            native: {
-                uuid: stateUuid,
-            },
-        };
-        await this.updateObjectAsync(id, obj);
-        if (stateEventHandler) {
-            this.addStateEventHandler(stateUuid, (value: StateValue) => {
-                stateEventHandler(id, value);
-            });
-        }
-    }
+		const obj: ioBroker.SettableObjectWorker<ioBroker.StateObject> = {
+			type: "state",
+			common: commonInfo,
+			native: {
+				uuid: stateUuid,
+			},
+		};
+		await this.updateObjectAsync(id, obj);
+		if (stateEventHandler) {
+			this.addStateEventHandler(stateUuid, (value: StateValue) => {
+				stateEventHandler(id, value);
+			});
+		}
+	}
 
 
 	public addStateEventHandler(uuid: string, eventHandler: StateEventHandler, name?: string): void {
-        if (this.stateEventHandlers[uuid] === undefined) {
-            this.stateEventHandlers[uuid] = [];
-        }
+		if (this.stateEventHandlers[uuid] === undefined) {
+			this.stateEventHandlers[uuid] = [];
+		}
 
-        if (name) {
-            this.removeStateEventHandler(uuid, name);
-        }
+		if (name) {
+			this.removeStateEventHandler(uuid, name);
+		}
 
-        this.stateEventHandlers[uuid].push({ name: name, handler: eventHandler });
-    }
+		this.stateEventHandlers[uuid].push({ name: name, handler: eventHandler });
+	}
 
-    public removeStateEventHandler(uuid: string, name: string): boolean {
-        if (this.stateEventHandlers[uuid] === undefined || !name) {
-            return false;
-        }
+	public removeStateEventHandler(uuid: string, name: string): boolean {
+		if (this.stateEventHandlers[uuid] === undefined || !name) {
+			return false;
+		}
 
-        let found = false;
-        for (let i = 0; i < this.stateEventHandlers[uuid].length; i++) {
-            if (this.stateEventHandlers[uuid][i].name === name) {
-                this.stateEventHandlers[uuid].splice(i, 1);
-                found = true;
-            }
-        }
+		let found = false;
+		for (let i = 0; i < this.stateEventHandlers[uuid].length; i++) {
+			if (this.stateEventHandlers[uuid][i].name === name) {
+				this.stateEventHandlers[uuid].splice(i, 1);
+				found = true;
+			}
+		}
 
-        return found;
-    }
+		return found;
+	}
 
 	public addStateChangeListener(id: string, listener: StateChangeListener): void {
-        this.stateChangeListeners[this.namespace + '.' + id] = listener;
-    }
+		this.stateChangeListeners[this.namespace + "." + id] = listener;
+	}
 
-    public setStateAck(id: string, value: CurrentStateValue): void {
-        this.currentStateValues[this.namespace + '.' + id] = value;
-        this.setState(id, { val: value, ack: true });
-    }
+	public setStateAck(id: string, value: CurrentStateValue): void {
+		this.currentStateValues[this.namespace + "." + id] = value;
+		this.setState(id, { val: value, ack: true });
+	}
 
-    public getCachedStateValue(id: string): OldStateValue {
-        if (this.currentStateValues.hasOwnProperty(id)) {
-            return this.currentStateValues[id];
-        }
+	public getCachedStateValue(id: string): OldStateValue {
+		if (this.currentStateValues.hasOwnProperty(id)) {
+			return this.currentStateValues[id];
+		}
 
-        return undefined;
-    }
+		return undefined;
+	}
 
 }
 
