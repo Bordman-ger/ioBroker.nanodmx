@@ -8,7 +8,7 @@ import * as utils from "@iobroker/adapter-core";
 // Load your modules here, e.g.:
 // import * as fs from "fs";
 import DMX from "dmx";
-const dmx = new DMX();
+// const dmx = new DMX();
 
 // Augment the adapter.config object with the actual types
 declare global {
