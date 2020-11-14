@@ -5,8 +5,7 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from "@iobroker/adapter-core";
-// Load your modules here, e.g.:
-// import * as fs from "fs";
+import { GlobalStates } from './structure-file';
 import DMX from "dmx";
 // const dmx = new DMX();
 
@@ -76,8 +75,7 @@ export class nanodmx extends utils.Adapter {
 		this.log.info(`Adapter state Ready`);
 		// Initialize your adapter here
 
-		this.mydmx = new DMX(
-		);
+		this.mydmx = new DMX();
 		// this.mydmx.registerDriver(name, module)
 		this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
 		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
@@ -96,6 +94,9 @@ export class nanodmx extends utils.Adapter {
         this.mydmx.on('authorized', () => {
             this.log.debug('authorized');
 		});
+		this.mydmx.on('connect_failed', () => {
+            this.log.error('Miniserver connect failed');
+        });
 		this.mydmx.on('connection_error', (error: any) => {
             this.log.error('Miniserver connection error: ' + error);
         });
@@ -104,8 +105,41 @@ export class nanodmx extends utils.Adapter {
             this.log.info('connection closed');
             this.setState('info.connection', false, true);
 		});
-		   // we are ready, let's set the connection indicator
-		 this.setState('info.connection', true, true);
+		this.mydmx.on('send', (message: any) => {
+            this.log.debug('sent message: ' + message);
+        });
+        this.mydmx.on('message_text', (message: any) => {
+            this.log.debug('message_text ' + JSON.stringify(message));
+        });
+        this.mydmx.on('message_file', (message: any) => {
+            this.log.debug('message_file ' + JSON.stringify(message));
+        });
+
+        this.mydmx.on('message_invalid', (message: any) => {
+            this.log.debug('message_invalid ' + JSON.stringify(message));
+        });
+		this.mydmx.on('keepalive', (time: number) => {
+            this.log.silly('keepalive (' + time + 'ms)');
+        });
+
+		// this.mydmx.on('get_structure_file', async (data: StructureFile) => {
+        //     this.log.silly('get_structure_file ' + JSON.stringify(data));
+        //     this.log.info('got structure file; last modified on ' + data.lastModified);
+
+        //     try {
+        //         await this.loadStructureFileAsync(data);
+        //         this.log.debug('structure file successfully loaded');
+
+        //         // we are ready, let's set the connection indicator
+        //         this.setState('info.connection', true, true);
+        //     } catch (error) {
+        //         this.log.error(`Couldn't load structure file: ${error}`);
+        //     }
+		// });
+		     // we are ready, let's set the connection indicator
+			 this.setState('info.connection', true, true);
+
+ 
 		/*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
@@ -238,9 +272,28 @@ export class nanodmx extends utils.Adapter {
         }
 
         this.stateChangeListeners[id](this.currentStateValues[id], state.val);
-
-
 	}
+	// private async loadStructureFileAsync(data: StructureFile): Promise<void> {
+	// 	this.stateEventHandlers = {};
+	// 	this.foundRooms = {};
+	// 	this.foundCats = {};
+	// 	this.operatingModes = data.operatingModes;
+	// 	await this.loadGlobalStatesAsync(data.globalStates);
+	// 	await this.loadControlsAsync(data.controls);
+	// 	await this.loadEnumsAsync(data.rooms, 'enum.rooms', this.foundRooms, this.config.syncRooms);
+	// 	await this.loadEnumsAsync(data.cats, 'enum.functions', this.foundCats, this.config.syncFunctions);
+	// 	await this.loadWeatherServerAsync(data.weatherServer);
+
+	// 	// replay all cached events (and clear them)
+	// 	if (this.cacheEvents) {
+	// 		this.cacheEvents = false;
+	// 		for (const uuid in this.eventsCache) {
+	// 			this.handleEvent(uuid, this.eventsCache[uuid]);
+	// 		}
+
+	// 		this.eventsCache = {};
+		
+	// }
 
 	// If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
 	// /**
@@ -257,6 +310,46 @@ export class nanodmx extends utils.Adapter {
 	// 		}
 	// 	}
 	// }
+
+	// private async loadGlobalStatesAsync(globalStates: GlobalStates): Promise<void> {
+    //     interface GlobalStateInfo {
+    //         type: ioBroker.CommonType;
+    //         role: string;
+    //         handler: (name: string, value: FlatStateValue) => void;
+    //     }
+    //     const globalStateInfos: Record<string, GlobalStateInfo> = {
+    //         operatingMode: {
+    //             type: 'number',
+    //             role: 'value',
+    //             handler: this.setOperatingMode.bind(this),
+    //         }
+    //         // sunrise: {
+            //     type: 'number',
+            //     role: 'value.interval',
+            //     handler: this.setStateAck.bind(this),
+            // },
+            // sunset: {
+            //     type: 'number',
+            //     role: 'value.interval',
+            //     handler: this.setStateAck.bind(this),
+            // },
+            // notifications: {
+            //     type: 'number',
+            //     role: 'value',
+            //     handler: this.setStateAck.bind(this),
+            // },
+            // modifications: {
+            //     type: 'number',
+            //     role: 'value',
+            //     handler: this.setStateAck.bind(this),
+            // },
+        // };
+    //     const defaultInfo: GlobalStateInfo = {
+    //         type: 'string',
+    //         role: 'text',
+    //         handler: this.setStateAck.bind(this),
+	// 	};
+		
 	private handleEvent(uuid: string, evt: any): void {
         if (this.cacheEvents) {
             this.eventsCache[uuid] = evt;
@@ -304,7 +397,7 @@ export class nanodmx extends utils.Adapter {
         commonInfo: ioBroker.StateCommon,
         stateUuid: string,
         stateEventHandler?: NamedStateEventHandler,
-    ): Promise<void> {
+  		): Promise<void> {
         /* TODO: re-add:
         if (commonInfo.hasOwnProperty('smartIgnore')) {
             // interpret smartIgnore (our own extension of common) to generate smartName if needed
