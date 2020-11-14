@@ -38,10 +38,7 @@ exports.nanodmx = void 0;
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 const utils = __importStar(require("@iobroker/adapter-core"));
-// Load your modules here, e.g.:
-// import * as fs from "fs";
 const dmx_1 = __importDefault(require("dmx"));
-const dmx = new dmx_1.default();
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
         super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
@@ -93,6 +90,9 @@ class nanodmx extends utils.Adapter {
             this.mydmx.on('authorized', () => {
                 this.log.debug('authorized');
             });
+            this.mydmx.on('connect_failed', () => {
+                this.log.error('Miniserver connect failed');
+            });
             this.mydmx.on('connection_error', (error) => {
                 this.log.error('Miniserver connection error: ' + error);
             });
@@ -100,6 +100,33 @@ class nanodmx extends utils.Adapter {
                 this.log.info('connection closed');
                 this.setState('info.connection', false, true);
             });
+            this.mydmx.on('send', (message) => {
+                this.log.debug('sent message: ' + message);
+            });
+            this.mydmx.on('message_text', (message) => {
+                this.log.debug('message_text ' + JSON.stringify(message));
+            });
+            this.mydmx.on('message_file', (message) => {
+                this.log.debug('message_file ' + JSON.stringify(message));
+            });
+            this.mydmx.on('message_invalid', (message) => {
+                this.log.debug('message_invalid ' + JSON.stringify(message));
+            });
+            this.mydmx.on('keepalive', (time) => {
+                this.log.silly('keepalive (' + time + 'ms)');
+            });
+            // this.mydmx.on('get_structure_file', async (data: StructureFile) => {
+            //     this.log.silly('get_structure_file ' + JSON.stringify(data));
+            //     this.log.info('got structure file; last modified on ' + data.lastModified);
+            //     try {
+            //         await this.loadStructureFileAsync(data);
+            //         this.log.debug('structure file successfully loaded');
+            //         // we are ready, let's set the connection indicator
+            //         this.setState('info.connection', true, true);
+            //     } catch (error) {
+            //         this.log.error(`Couldn't load structure file: ${error}`);
+            //     }
+            // });
             // we are ready, let's set the connection indicator
             this.setState('info.connection', true, true);
             /*
@@ -221,6 +248,24 @@ class nanodmx extends utils.Adapter {
         }
         this.stateChangeListeners[id](this.currentStateValues[id], state.val);
     }
+    // private async loadStructureFileAsync(data: StructureFile): Promise<void> {
+    // 	this.stateEventHandlers = {};
+    // 	this.foundRooms = {};
+    // 	this.foundCats = {};
+    // 	this.operatingModes = data.operatingModes;
+    // 	await this.loadGlobalStatesAsync(data.globalStates);
+    // 	await this.loadControlsAsync(data.controls);
+    // 	await this.loadEnumsAsync(data.rooms, 'enum.rooms', this.foundRooms, this.config.syncRooms);
+    // 	await this.loadEnumsAsync(data.cats, 'enum.functions', this.foundCats, this.config.syncFunctions);
+    // 	await this.loadWeatherServerAsync(data.weatherServer);
+    // 	// replay all cached events (and clear them)
+    // 	if (this.cacheEvents) {
+    // 		this.cacheEvents = false;
+    // 		for (const uuid in this.eventsCache) {
+    // 			this.handleEvent(uuid, this.eventsCache[uuid]);
+    // 		}
+    // 		this.eventsCache = {};
+    // }
     // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
     // /**
     //  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
@@ -236,6 +281,44 @@ class nanodmx extends utils.Adapter {
     // 		}
     // 	}
     // }
+    // private async loadGlobalStatesAsync(globalStates: GlobalStates): Promise<void> {
+    //     interface GlobalStateInfo {
+    //         type: ioBroker.CommonType;
+    //         role: string;
+    //         handler: (name: string, value: FlatStateValue) => void;
+    //     }
+    //     const globalStateInfos: Record<string, GlobalStateInfo> = {
+    //         operatingMode: {
+    //             type: 'number',
+    //             role: 'value',
+    //             handler: this.setOperatingMode.bind(this),
+    //         }
+    //         // sunrise: {
+    //     type: 'number',
+    //     role: 'value.interval',
+    //     handler: this.setStateAck.bind(this),
+    // },
+    // sunset: {
+    //     type: 'number',
+    //     role: 'value.interval',
+    //     handler: this.setStateAck.bind(this),
+    // },
+    // notifications: {
+    //     type: 'number',
+    //     role: 'value',
+    //     handler: this.setStateAck.bind(this),
+    // },
+    // modifications: {
+    //     type: 'number',
+    //     role: 'value',
+    //     handler: this.setStateAck.bind(this),
+    // },
+    // };
+    //     const defaultInfo: GlobalStateInfo = {
+    //         type: 'string',
+    //         role: 'text',
+    //         handler: this.setStateAck.bind(this),
+    // 	};
     handleEvent(uuid, evt) {
         if (this.cacheEvents) {
             this.eventsCache[uuid] = evt;
