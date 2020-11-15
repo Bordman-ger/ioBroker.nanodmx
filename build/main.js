@@ -84,12 +84,12 @@ class nanodmx extends utils.Adapter {
                 if (on) {
                     on = false;
                     universe.updateAll(0);
-                    console.log('off');
+                    this.log.info('off');
                 }
                 else {
                     on = true;
                     universe.updateAll(250);
-                    console.log('on');
+                    this.log.info('on');
                 }
             }, 1000);
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
