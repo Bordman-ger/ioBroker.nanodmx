@@ -59,15 +59,6 @@ class nanodmx extends utils.Adapter {
      */
     onReady() {
         return __awaiter(this, void 0, void 0, function* () {
-            // store all current (acknowledged) state values
-            // const allStates = await this.getStatesAsync("*");
-            // for (const id in allStates) {
-            // 	if (allStates[id] && allStates[id].ack) {
-            // 		this.currentStateValues[id] = allStates[id].val;
-            // 	}
-            // }
-            // store all existing objects for later use
-            // this.existingObjects = await this.getAdapterObjectsAsync();
             // Reset the connection indicator during startup
             this.setState("info.connection", false, true);
             this.log.info(`Adapter state Ready`);
@@ -88,10 +79,11 @@ class nanodmx extends utils.Adapter {
                 }
                 else {
                     on = true;
-                    universe.updateAll(250);
+                    // universe.updateAll(250);
+                    universe.update({ 1: 255, 2: 250, 3: 250, 4: 100 });
                     this.log.info('on');
                 }
-            }, 1000);
+            }, 5000);
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
             this.log.info(`Test ausgeführt`);

@@ -59,17 +59,6 @@ class nanodmx extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	private async onReady(): Promise<void> {
-		// store all current (acknowledged) state values
-		// const allStates = await this.getStatesAsync("*");
-		// for (const id in allStates) {
-		// 	if (allStates[id] && allStates[id].ack) {
-		// 		this.currentStateValues[id] = allStates[id].val;
-		// 	}
-		// }
-
-		// store all existing objects for later use
-		// this.existingObjects = await this.getAdapterObjectsAsync();
-
 		// Reset the connection indicator during startup
 		this.setState("info.connection", false, true);
 
@@ -90,14 +79,16 @@ class nanodmx extends utils.Adapter {
 		setInterval(() => {
 		if (on) {
 			on = false;
+			
 			universe.updateAll(0);
 			this.log.info('off');
 		} else {
 			on = true;
-			universe.updateAll(250);
+			// universe.updateAll(250);
+			universe.update({1: 255, 2: 250, 3: 250, 4: 100});
 			this.log.info('on');
 		}
-		}, 1000);
+		}, 5000);
 
 
 
