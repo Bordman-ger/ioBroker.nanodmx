@@ -101,9 +101,9 @@ class nanodmx extends utils.Adapter {
                 },
                 native: {},
             });
-            this.cacheEvents = true;
-            this.mydmx.connect();
-            this.subscribeStates("*");
+            // this.cacheEvents = true;
+            // this.mydmx.connect();
+            // this.subscribeStates("*");
             // dmx.update(universe, channels[, extraData])
             this.mydmx.update({ 1: 1, 2: 0 });
             // this.mydmx.dmx.universe.update({16: 1, 17: 255});

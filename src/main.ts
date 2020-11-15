@@ -108,10 +108,10 @@ class nanodmx extends utils.Adapter {
 		});
 
 
-	    this.cacheEvents = true;
-	    this.mydmx.connect();
+	    // this.cacheEvents = true;
+	    // this.mydmx.connect();
 
-	    this.subscribeStates("*");
+	    // this.subscribeStates("*");
 
 
 
