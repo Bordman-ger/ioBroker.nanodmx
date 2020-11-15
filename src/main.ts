@@ -18,6 +18,7 @@ declare global {
 			test: number;
 		}
 	}
+
 }
 export type FlatStateValue = string | number | boolean;
 export type StateValue = FlatStateValue | any[] | Record<string, any>;
