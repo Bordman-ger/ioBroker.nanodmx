@@ -77,35 +77,38 @@ class nanodmx extends utils.Adapter {
 		// Initialize your adapter here
 
 		this.mydmx = new DMX();
-		// this.mydmx.registerDriver(name, module)
-		this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+
 		// var universe = dmx.addUniverse('demo', 'enttec-open-usb-dmx', '/dev/cu.usbserial-6AVNHXS8')
 		// const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
 		// const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
 		// const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+		const universe = this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+		this.log.info(`Universe erzeugt`);
+
+		let on = false;
+
+		setInterval(() => {
+		if (on) {
+			on = false;
+			universe.updateAll(0);
+			console.log('off');
+		} else {
+			on = true;
+			universe.updateAll(250);
+			console.log('on');
+		}
+		}, 1000);
+
+
+
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info(`Universe erzeugt`);
+		this.log.info(`Test ausgeführt`);
 
 		this.log.info("config option1: " + this.config.device);
 		this.log.info("config option2: " + this.config.test);
 
-		// dmx.update(universe, channels[, extraData])
-		this.mydmx.universe.update({1: 1, 2: 0});
-		// this.mydmx.dmx.universe.update({16: 1, 17: 255});
-		// this.mydmx.dmx.universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
-		// let on = false;
-		// setInterval(() => {
-		// 	if (on) {
-		// 		on = false;
-		// 		this.mydmx.dmx.universe.updateAll(0);
-		// 		console.log("'off");
-		// 	} else {
-		// 		on = true;
-		// 		this.mydmx.dmx.universe.updateAll(250);
-		// 		console.log("on");
-		// 	}
-		// }, 1000);
+
 
 
 	    // we are ready, let's set the connection indicator
