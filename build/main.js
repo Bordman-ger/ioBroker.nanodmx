@@ -81,8 +81,25 @@ class nanodmx extends utils.Adapter {
             // const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
+            this.log.info(`Universe erzeugt`);
             this.log.info("config option1: " + this.config.device);
             this.log.info("config option2: " + this.config.test);
+            // dmx.update(universe, channels[, extraData])
+            this.mydmx.universe.update({ 1: 1, 2: 0 });
+            // this.mydmx.dmx.universe.update({16: 1, 17: 255});
+            // this.mydmx.dmx.universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
+            // let on = false;
+            // setInterval(() => {
+            // 	if (on) {
+            // 		on = false;
+            // 		this.mydmx.dmx.universe.updateAll(0);
+            // 		console.log("'off");
+            // 	} else {
+            // 		on = true;
+            // 		this.mydmx.dmx.universe.updateAll(250);
+            // 		console.log("on");
+            // 	}
+            // }, 1000);
             // we are ready, let's set the connection indicator
             this.setState("info.connection", true, true);
             /*
@@ -101,35 +118,6 @@ class nanodmx extends utils.Adapter {
                 },
                 native: {},
             });
-            // this.cacheEvents = true;
-            // this.mydmx.connect();
-            // this.subscribeStates("*");
-            // dmx.update(universe, channels[, extraData])
-            this.mydmx.update({ 1: 1, 2: 0 });
-            // this.mydmx.dmx.universe.update({16: 1, 17: 255});
-            // this.mydmx.dmx.universe.update({1: 255, 3: 120, 4: 230, 5: 30, 6: 110, 7: 255, 8: 10, 9: 255, 10: 255, 11: 0});
-            // let on = false;
-            // setInterval(() => {
-            // 	if (on) {
-            // 		on = false;
-            // 		this.mydmx.dmx.universe.updateAll(0);
-            // 		console.log("'off");
-            // 	} else {
-            // 		on = true;
-            // 		this.mydmx.dmx.universe.updateAll(250);
-            // 		console.log("on");
-            // 	}
-            // }, 1000);
-            // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-            // this.subscribeStates("testVariable");
-            // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
-            // this.subscribeStates("lights.*");
-            // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-            // this.subscribeStates("*");
-            /*
-                setState examples
-                you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-            */
             // the variable testVariable is set to true as command (ack=false)
             yield this.setStateAsync("testVariable", true);
             // same thing, but the value is flagged "ack"
@@ -160,20 +148,6 @@ class nanodmx extends utils.Adapter {
             callback();
         }
     }
-    // If you need to react to object changes, uncomment the following block and the corresponding line in the constructor.
-    // You also need to subscribe to the objects with `this.subscribeObjects`, similar to `this.subscribeStates`.
-    // /**
-    //  * Is called if a subscribed object changes
-    //  */
-    // private onObjectChange(id: string, obj: ioBroker.Object | null | undefined): void {
-    // 	if (obj) {
-    // 		// The object was changed
-    // 		this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
-    // 	} else {
-    // 		// The object was deleted
-    // 		this.log.info(`object ${id} deleted`);
-    // 	}
-    // }
     /**
      * Is called if a subscribed state changes
      */
