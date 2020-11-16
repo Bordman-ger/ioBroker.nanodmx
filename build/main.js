@@ -82,7 +82,7 @@ class nanodmx extends utils.Adapter {
                     // universe.updateAll(250);
                     // universe.update({1: 65, 2: 0, 3: 255, 4: 0});
                     // universe.update({5: 65, 6: 0, 7: 255, 8: 0});
-                    universe.update({ 9: 65, 10: 65, 11: 255, 12: 0 });
+                    universe.update({ 10: 65, 11: 0, 12: 255, 13: 0 });
                     this.log.info('on');
                 }
             }, 5000);
