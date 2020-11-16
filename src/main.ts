@@ -74,12 +74,13 @@ class nanodmx extends utils.Adapter {
 		const universe = this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
 		this.log.info(`Universe erzeugt`);
 		universe.updateAll(0);
-		// Küche 9-12 
-		universe.update({10: 65, 11: 0, 12: 255,13 : 0});
+		
 		// Keller 1-4
-		universe.update({2: 65, 3: 0, 4: 255,5 : 0});
+		universe.update({2: 90, 3: 15, 4: 255, 5 : 25});
 		// OG 5-8
-		universe.update({6: 65, 7: 0, 8: 255,9 : 0});
+		universe.update({6: 90, 7: 15, 8: 255, 9 : 25});
+		// Küche 9-12 
+		universe.update({10: 90, 11: 15, 12: 255, 13 : 25});
 		// Party 15-17, Terasse 18-20
 
 		this.log.info('on');
@@ -94,8 +95,8 @@ class nanodmx extends utils.Adapter {
 		// } else {
 		// 	on = true;
 		// 	// universe.updateAll(250);
-		// 	// universe.update({1: 65, 2: 0, 3: 255, 4: 0});
-		// 	// universe.update({5: 65, 6: 0, 7: 255, 8: 0});
+		// 	// universe.update({1: 65, 2: 15, 3: 255, 4: 0});
+		// 	// universe.update({5: 65, 6: 15, 7: 255, 8: 0});
 		// 	universe.update({10: 65, 11: 0, 12: 255,13 : 0});
 		// 	this.log.info('on');
 		// }
