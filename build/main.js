@@ -127,12 +127,14 @@ class nanodmx extends utils.Adapter {
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
     onUnload(callback) {
+        var _a;
         try {
             // Here you must clear all timeouts or intervals that may still be active
             // clearTimeout(timeout1);
             // clearTimeout(timeout2);
             // ...
             // clearInterval(interval1);
+            (_a = this.mydmx) === null || _a === void 0 ? void 0 : _a.close();
             callback();
         }
         catch (e) {

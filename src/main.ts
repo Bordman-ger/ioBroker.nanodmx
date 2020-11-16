@@ -149,6 +149,8 @@ class nanodmx extends utils.Adapter {
 			// clearTimeout(timeout2);
 			// ...
 			// clearInterval(interval1);
+			this.mydmx?.close();
+			
 			callback();
 		} catch (e) {
 			callback();
