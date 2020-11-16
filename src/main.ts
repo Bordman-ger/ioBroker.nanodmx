@@ -7,8 +7,8 @@
 import * as utils from "@iobroker/adapter-core";
 import DMX from "dmx";
 // const dmx = new DMX();
-declare var adaptername: string;
-adaptername   = "nanodmx";
+// declare var adaptername: string;
+// adaptername   = "nanodmx";
 
 // Augment the adapter.config object with the actual types
 declare global {
@@ -177,6 +177,7 @@ class nanodmx extends utils.Adapter {
 	 */
 	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
 		if (state) {
+			var adaptername = "nanodmx";
 			// The state was changed: state nanodmx.0.DMX010 changed: 100 (ack = false)
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 			var PORTSTRING = id.substring(adaptername.length+3);  				//remove Instance name

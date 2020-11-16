@@ -38,7 +38,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // you need to create an adapter
 const utils = __importStar(require("@iobroker/adapter-core"));
 const dmx_1 = __importDefault(require("dmx"));
-adaptername = "nanodmx";
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
         super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
@@ -155,6 +154,7 @@ class nanodmx extends utils.Adapter {
      */
     onStateChange(id, state) {
         if (state) {
+            var adaptername = "nanodmx";
             // The state was changed: state nanodmx.0.DMX010 changed: 100 (ack = false)
             this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
             var PORTSTRING = id.substring(adaptername.length + 3); //remove Instance name
