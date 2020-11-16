@@ -7,6 +7,8 @@
 import * as utils from "@iobroker/adapter-core";
 import DMX from "dmx";
 // const dmx = new DMX();
+declare var adaptername: string;
+adaptername   = "nanodmx";
 
 // Augment the adapter.config object with the actual types
 declare global {
@@ -22,6 +24,7 @@ declare global {
 	}
 
 }
+
 export type FlatStateValue = string | number | boolean;
 export type StateValue = FlatStateValue | any[] | Record<string, any>;
 
@@ -44,11 +47,12 @@ class nanodmx extends utils.Adapter {
 	private cacheEvents = false;
 	private eventsCache: Record<string, any> = {};
 
+
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			// dirname: __dirname.indexOf('node_modules') !== -1 ? undefined : __dirname + '/../',
 			...options,
-			name: "nanodmx",
+			name: adaptername,
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
@@ -173,8 +177,16 @@ class nanodmx extends utils.Adapter {
 	 */
 	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
 		if (state) {
-			// The state was changed
+			// The state was changed: state nanodmx.0.DMX010 changed: 100 (ack = false)
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			var PORTSTRING = id.substring(adaptername.length+3);  				//remove Instance name
+			// if (PORTSTRING[0] ='.'){PORTSTRING = id.substring(adaptername.length+4)};  //optional removal if more than 10 Instances are used 
+			var PORTNUMBER:number = parseInt(PORTSTRING.substring(3));
+			this.log.info(`string ${PORTSTRING}`);
+			this.log.info(`number ${PORTNUMBER}`);
+		
+		
+		
 		} else {
 			// The state was deleted
 			this.log.info(`state ${id} deleted`);
