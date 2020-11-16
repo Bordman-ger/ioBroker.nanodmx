@@ -40,7 +40,7 @@ const utils = __importStar(require("@iobroker/adapter-core"));
 const dmx_1 = __importDefault(require("dmx"));
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
-        super(Object.assign(Object.assign({ dirname: __dirname.indexOf('node_modules') !== -1 ? undefined : __dirname + '/../' }, options), { name: "nanodmx" }));
+        super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
         this.existingObjects = {};
         this.currentStateValues = {};
         // private operatingModes: OperatingModes = {};
@@ -81,14 +81,14 @@ class nanodmx extends utils.Adapter {
                     on = true;
                     // universe.updateAll(250);
                     universe.update({ 1: 65, 2: 0, 3: 255, 4: 0 });
-                    // universe.update({5: 65, 6: 0, 7: 255, 8: 0});
-                    // universe.update({9: 65, 10: 0, 11: 255, 12: 0});
+                    universe.update({ 5: 65, 6: 0, 7: 255, 8: 0 });
+                    universe.update({ 9: 65, 10: 0, 11: 255, 12: 0 });
                     this.log.info('on');
                 }
             }, 5000);
+            this.log.info(`Test ausgeführt`);
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
-            this.log.info(`Test ausgeführt`);
             this.log.info("config option1: " + this.config.device);
             this.log.info("config option2: " + this.config.test);
             // we are ready, let's set the connection indicator
@@ -109,13 +109,19 @@ class nanodmx extends utils.Adapter {
                 },
                 native: {},
             });
+            // In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
+            this.subscribeStates("testVariable");
+            // You can also add a subscription for multiple states. The following line watches all states starting with "lights."
+            // this.subscribeStates("lights.*");
+            // Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
+            // this.subscribeStates("*");
             // the variable testVariable is set to true as command (ack=false)
-            yield this.setStateAsync("testVariable", true);
+            // await this.setStateAsync("testVariable", true);
             // same thing, but the value is flagged "ack"
             // ack should be always set to true if the value is received from or acknowledged from the target system
-            yield this.setStateAsync("testVariable", { val: true, ack: true });
+            // await this.setStateAsync("testVariable", { val: true, ack: true });
             // same thing, but the state is deleted after 30s (getState will return null afterwards)
-            yield this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
+            // await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
             // // examples for the checkPassword/checkGroup functions
             // let result = await this.checkPasswordAsync("admin", "iobroker");
             // this.log.info("check user admin pw iobroker: " + result);
@@ -146,36 +152,14 @@ class nanodmx extends utils.Adapter {
      * Is called if a subscribed state changes
      */
     onStateChange(id, state) {
-        if (!id || !state || state.ack) {
-            return;
+        if (state) {
+            // The state was changed
+            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
         }
-        // The state was changed from the outside
-        this.log.debug(`state ${id} changed: ${JSON.stringify(state.val)}`);
-        const idParts = id.split('.');
-        idParts.shift(); // remove adapter name
-        idParts.shift(); // remove instance number
-    }
-    addStateEventHandler(uuid, eventHandler, name) {
-        if (this.stateEventHandlers[uuid] === undefined) {
-            this.stateEventHandlers[uuid] = [];
+        else {
+            // The state was deleted
+            this.log.info(`state ${id} deleted`);
         }
-        if (name) {
-            this.removeStateEventHandler(uuid, name);
-        }
-        this.stateEventHandlers[uuid].push({ name: name, handler: eventHandler });
-    }
-    removeStateEventHandler(uuid, name) {
-        if (this.stateEventHandlers[uuid] === undefined || !name) {
-            return false;
-        }
-        let found = false;
-        for (let i = 0; i < this.stateEventHandlers[uuid].length; i++) {
-            if (this.stateEventHandlers[uuid][i].name === name) {
-                this.stateEventHandlers[uuid].splice(i, 1);
-                found = true;
-            }
-        }
-        return found;
     }
 }
 if (module.parent) {
