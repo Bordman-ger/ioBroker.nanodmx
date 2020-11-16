@@ -102,29 +102,37 @@ class nanodmx extends utils.Adapter {
 	    // we are ready, let's set the connection indicator
 		this.setState("info.connection", true, true);
 
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectNotExistsAsync("testVariable", {
-			type: "state",
-			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
-				read: true,
-				write: true,
-			},
-			native: {},
-		});
 
+		//Initialize ioBrokers state objects if they dont exist
+		//DMX CHANNELS contain and send DMX value 0-255 to a DMX channel
+		// for (i=1;i<=DMX_CHANNELS_USED;i++){
+		for (let i = 2; i < 21 ; i++) {
+		// for (i:Number =1;i<=21;i++){
+			this.setObjectNotExists (this.GetDMX (i),{
+				type:'state',
+				common:{name:'DMX channel'+i ,type:'number',role:'value',read:true,write:true},
+				native:{}
+			});
+		}
+			
+		
+		// await this.setObjectNotExistsAsync("testVariable", {
+		// 	type: "state",
+		// 	common: {
+		// 		name: "testVariable",
+		// 		type: "boolean",
+		// 		role: "indicator",
+		// 		read: true,
+		// 		write: true,
+		// 	},
+		// 	native: {},
+		// });
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
-		this.subscribeStates("testVariable");
+		// this.subscribeStates("testVariable");
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates("lights.*");
 		// Or, if you really must, you can also watch all states. Don't do this if you don't need to. Otherwise this will cause a lot of unnecessary load on the system:
-		// this.subscribeStates("*");
+		this.subscribeStates("*");
 		// the variable testVariable is set to true as command (ack=false)
 		// await this.setStateAsync("testVariable", true);
 		// same thing, but the value is flagged "ack"
@@ -173,7 +181,11 @@ class nanodmx extends utils.Adapter {
 		}
 	}
 	
-	
+	private GetDMX (number:number){
+		if (number <10) {return 'DMX00'+number;}
+		if (number <100) {return 'DMX0'+number;}
+		return 'DMX'+number;
+	}
 
 }
 
