@@ -69,7 +69,7 @@ class nanodmx extends utils.Adapter {
             // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
             // const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
             // const universe = this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
-            const universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.driver, "null");
+            const universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.device, "null");
             this.log.info(`Universe erzeugt`);
             universe.updateAll(0);
             // Keller 1-4
