@@ -68,7 +68,8 @@ class nanodmx extends utils.Adapter {
             // const universe = dmx.addUniverse('demo', 'socketio', null, {port: 17809, debug: true});
             // const universe = dmx.addUniverse('myusb', 'dmx4all', '/dev/usb1', 'null');
             // const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
-            const universe = this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+            // const universe = this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
+            const universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.driver, "null");
             this.log.info(`Universe erzeugt`);
             universe.updateAll(0);
             // Keller 1-4
@@ -79,25 +80,12 @@ class nanodmx extends utils.Adapter {
             universe.update({ 10: 90, 11: 15, 12: 255, 13: 25 });
             // Party 15-17, Terasse 18-20
             this.log.info('on');
-            // let on = false;
-            // setInterval(() => {
-            // if (on) {
-            // 	on = false;
-            // 	universe.updateAll(0);
-            // 	this.log.info('off');
-            // } else {
-            // 	on = true;
-            // 	// universe.updateAll(250);
-            // 	// universe.update({1: 65, 2: 15, 3: 255, 4: 0});
-            // 	// universe.update({5: 65, 6: 15, 7: 255, 8: 0});
-            // 	universe.update({10: 65, 11: 0, 12: 255,13 : 0});
-            // 	this.log.info('on');
-            // }
-            // }, 5000);
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
             this.log.info("config option1: " + this.config.device);
-            this.log.info("config option2: " + this.config.test);
+            this.log.info("config option2: " + this.config.option2);
+            this.log.info("config option3: " + this.config.driver);
+            this.log.info("config option4: " + this.config.option4);
             // we are ready, let's set the connection indicator
             this.setState("info.connection", true, true);
             /*
