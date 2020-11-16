@@ -41,7 +41,7 @@ const dmx_1 = __importDefault(require("dmx"));
 adaptername = "nanodmx";
 class nanodmx extends utils.Adapter {
     constructor(options = {}) {
-        super(Object.assign(Object.assign({}, options), { name: adaptername }));
+        super(Object.assign(Object.assign({}, options), { name: "nanodmx" }));
         this.existingObjects = {};
         this.currentStateValues = {};
         // private operatingModes: OperatingModes = {};

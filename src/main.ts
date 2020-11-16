@@ -52,7 +52,7 @@ class nanodmx extends utils.Adapter {
 		super({
 			// dirname: __dirname.indexOf('node_modules') !== -1 ? undefined : __dirname + '/../',
 			...options,
-			name: adaptername,
+			name: "nanodmx",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
