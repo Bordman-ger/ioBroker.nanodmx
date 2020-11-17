@@ -183,10 +183,11 @@ class nanodmx extends utils.Adapter {
 			var PORTSTRING = id.substring(adaptername.length+3);  				//remove Instance name
 			// if (PORTSTRING[0] ='.'){PORTSTRING = id.substring(adaptername.length+4)};  //optional removal if more than 10 Instances are used 
 			var PORTNUMBER:number = parseInt(PORTSTRING.substring(3));
-			this.log.info(`string ${PORTSTRING}`);
+			// this.log.info(`string ${PORTSTRING}`);
 			this.log.info(`number ${PORTNUMBER}`);
-		
-		
+			this.log.info(`number ${state.val}`);
+			this.mydmx.universe.update({PORTNUMBER: state.val });
+			this.log.info('updated');
 		
 		} else {
 			// The state was deleted
