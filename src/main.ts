@@ -79,16 +79,17 @@ class nanodmx extends utils.Adapter {
 		// const universe = dmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
 
 		// const universe = this.mydmx.addUniverse("myusb", "dmx4all", "/dev/ttyACM0", "null");
-		const universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.device, "null");
+		// const universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.device, "null");
+		this.mydmx.universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.device, "null");
 		this.log.info(`Universe erzeugt`);
-		universe.updateAll(0);
+		this.mydmx.universe.updateAll(0);
 		
 		// Keller 1-4
-		universe.update({2: 90, 3: 15, 4: 255, 5 : 25});
+		this.mydmx.universe.update({2: 90, 3: 15, 4: 255, 5 : 25});
 		// OG 5-8
-		universe.update({6: 90, 7: 15, 8: 255, 9 : 25});
+		this.mydmx.universe.update({6: 90, 7: 15, 8: 255, 9 : 25});
 		// Küche 9-12 
-		universe.update({10: 90, 11: 15, 12: 255, 13 : 25});
+		this.mydmx.universe.update({10: 90, 11: 15, 12: 255, 13 : 25});
 		// Party 15-17, Terasse 18-20
 
 		this.log.info('on');
@@ -185,7 +186,7 @@ class nanodmx extends utils.Adapter {
 			var PORTNUMBER:number = parseInt(PORTSTRING.substring(3));
 			// this.log.info(`string ${PORTSTRING}`);
 			this.log.info(`number ${PORTNUMBER}`);
-			this.log.info(`number ${state.val}`);
+			this.log.info(`value ${state.val}`);
 			this.mydmx.universe.update({PORTNUMBER: state.val });
 			this.log.info('updated');
 		
