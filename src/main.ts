@@ -188,10 +188,10 @@ class nanodmx extends utils.Adapter {
 			// this.mydmx.universe.update({10: 255});
 			this.log.info(`number ${PORTNUMBER}`);
 			this.log.info(`value ${state.val}`);
-			this.mydmx.universe.update({PORTNUMBER: state.val });
+			this.mydmx.universe.update({PORTNUMBER: Number(state.val) });
 			this.log.info('updated');
-			this.log.info("Adaptername ${this.name}	");
-			this.log.info("Adaptername ${this.namespace}	");
+			this.log.info(this.name);
+			this.log.info(this.namespace);
 		// Küche 9-12 
 		} else {
 			// The state was deleted
