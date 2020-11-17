@@ -192,7 +192,7 @@ class nanodmx extends utils.Adapter {
 			this.log.info(`value ${state.val}`);
 			// this.mydmx.universe.update({ 10:1 });
 			// this.mydmx.universe.update({11: state.val });
-			this.mydmx.universe.update({"11": state.val });
+			this.mydmx.universe.update({portnumber: state.val });
 			this.log.info('updated');
 			
 		
