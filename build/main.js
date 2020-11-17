@@ -73,13 +73,13 @@ class nanodmx extends utils.Adapter {
             this.mydmx.universe = this.mydmx.addUniverse("myusb", this.config.driver, this.config.device, "null");
             this.log.info(`Universe erzeugt`);
             this.mydmx.universe.updateAll(0);
-            // Keller 1-4
+            // Keller 2-5
             this.mydmx.universe.update({ 2: 90, 3: 15, 4: 255, 5: 25 });
-            // OG 5-8
+            // OG 6-9
             this.mydmx.universe.update({ 6: 90, 7: 15, 8: 255, 9: 25 });
-            // Küche 9-12 
+            // Küche 10-13 
             this.mydmx.universe.update({ 10: 90, 11: 15, 12: 255, 13: 25 });
-            // Party 15-17, Terasse 18-20
+            // Party 16-18, Terasse 19-21
             this.log.info('on');
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
@@ -166,7 +166,7 @@ class nanodmx extends utils.Adapter {
             // this.mydmx.universe.update({10: 255});
             this.log.info(`number ${PORTNUMBER}`);
             this.log.info(`value ${state.val}`);
-            this.mydmx.universe.update({ 10: Number(state.val) });
+            this.mydmx.universe.update({ PORTNUMBER: Number(state.val) });
             this.log.info('updated');
             // Küche 9-12 
         }
