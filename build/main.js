@@ -78,7 +78,7 @@ class nanodmx extends utils.Adapter {
             // OG 5-8
             this.mydmx.universe.update({ 6: 90, 7: 15, 8: 255, 9: 25 });
             // Küche 9-12 
-            this.mydmx.universe.update({ 10: 90, 11: 15, 12: 0, 13: 255 });
+            this.mydmx.universe.update({ 10: 90, 11: 15, 12: 255, 13: 25 });
             // Party 15-17, Terasse 18-20
             this.log.info('on');
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
@@ -162,11 +162,12 @@ class nanodmx extends utils.Adapter {
             // if (PORTSTRING[0] ='.'){PORTSTRING = id.substring(adaptername.length+4)};  //optional removal if more than 10 Instances are used 
             var PORTNUMBER = parseInt(PORTSTRING.substring(3));
             // this.log.info(`string ${PORTSTRING}`);
-            this.mydmx.universe.update({ 12: 255 });
+            // this.mydmx.universe.update({10: 255});
             this.log.info(`number ${PORTNUMBER}`);
             this.log.info(`value ${state.val}`);
             this.mydmx.universe.update({ PORTNUMBER: state.val });
             this.log.info('updated');
+            // Küche 9-12 
         }
         else {
             // The state was deleted
