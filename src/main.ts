@@ -188,8 +188,8 @@ class nanodmx extends utils.Adapter {
 			this.log.info(`number ${portnumber}`);
 			this.log.info(`value ${state.val}`);
 
-			this.mydmx.universe.update({11: state.val });   // <- geht
-			this.mydmx.universe.update({portnumber: state.val });   // <-< geht nicht
+			// this.mydmx.universe.update({11: state.val });   // <- geht
+			this.mydmx.universe.update({[portnumber]: state.val });   // <-< geht nicht
 		
 			this.log.info('updated');
 			

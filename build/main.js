@@ -163,8 +163,8 @@ class nanodmx extends utils.Adapter {
             let portnumber = parseInt(portstring.substring(3));
             this.log.info(`number ${portnumber}`);
             this.log.info(`value ${state.val}`);
-            this.mydmx.universe.update({ 11: state.val }); // <- geht
-            this.mydmx.universe.update({ portnumber: state.val }); // <-< geht nicht
+            // this.mydmx.universe.update({11: state.val });   // <- geht
+            this.mydmx.universe.update({ [portnumber]: state.val }); // <-< geht nicht
             this.log.info('updated');
             // Küche 10-13 
         }
