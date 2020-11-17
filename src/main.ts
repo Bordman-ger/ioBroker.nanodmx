@@ -183,16 +183,14 @@ class nanodmx extends utils.Adapter {
 			// The state was changed: state nanodmx.0.DMX010 changed: 100 (ack = false)
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 			let portstring:string = id.substring(this.name.length+3);  				//remove Instance name
-			// if (PORTSTRING[0] ='.'){PORTSTRING = id.substring(adaptername.length+4)};  //optional removal if more than 10 Instances are used 
-			// var PORTNUMBER:number = parseInt(PORTSTRING.substring(3));
 			let portnumber:number = parseInt(portstring.substring(3));
-			// this.log.info(`string ${PORTSTRING}`);
-			// this.mydmx.universe.update({10: 255});
+
 			this.log.info(`number ${portnumber}`);
 			this.log.info(`value ${state.val}`);
-			// this.mydmx.universe.update({ 10:1 });
-			// this.mydmx.universe.update({11: state.val });
-			this.mydmx.universe.update({portnumber: state.val });
+
+			this.mydmx.universe.update({11: state.val });   // <- geht
+			this.mydmx.universe.update({portnumber: state.val });   // <-< geht nicht
+		
 			this.log.info('updated');
 			
 		
