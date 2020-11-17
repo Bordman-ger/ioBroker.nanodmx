@@ -78,7 +78,7 @@ class nanodmx extends utils.Adapter {
             // OG 5-8
             this.mydmx.universe.update({ 6: 90, 7: 15, 8: 255, 9: 25 });
             // Küche 9-12 
-            this.mydmx.universe.update({ 10: 90, 11: 15, 12: 255, 13: 25 });
+            this.mydmx.universe.update({ 10: 90, 11: 15, 12: 0, 13: 255 });
             // Party 15-17, Terasse 18-20
             this.log.info('on');
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
