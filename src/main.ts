@@ -101,19 +101,19 @@ class nanodmx extends utils.Adapter {
 		//LIMIT the number of DMX channels max. 224 usable with ioBroker
 		if (this.config.channels_used >224) {this.config.channels_used = 224};
 		if (this.config.channels_used <0) {this.config.channels_used = 1};
-		
+
 		this.log.info("config option1: " + this.config.device);
 		this.log.info("config option3: " + this.config.driver);
 		this.log.info("config option4: " + this.config.channels_used);
 
 	    // we are ready, let's set the connection indicator
 		this.setState("info.connection", true, true);
-
+//UWE offen Check driver/Device
 
 		//Initialize ioBrokers state objects if they dont exist
 		//DMX CHANNELS contain and send DMX value 0-255 to a DMX channel
 		// for (i=1;i<=DMX_CHANNELS_USED;i++){
-		for (let i = 2; i < this.config.channels_used ; i++) {
+		for (let i = 0; i <= this.config.channels_used ; i++) {
 		// for (i:Number =1;i<=21;i++){
 			this.setObjectNotExists (this.GetDMX (i),{
 				type:'state',
