@@ -83,16 +83,24 @@ class nanodmx extends utils.Adapter {
             this.log.info('on');
             // The adapters config (in the instance object everything under the attribute "native") is accessible via
             // this.config:
+            //LIMIT the number of DMX channels max. 224 usable with ioBroker
+            if (this.config.channels_used > 224) {
+                this.config.channels_used = 224;
+            }
+            ;
+            if (this.config.channels_used < 0) {
+                this.config.channels_used = 1;
+            }
+            ;
             this.log.info("config option1: " + this.config.device);
-            this.log.info("config option2: " + this.config.option2);
             this.log.info("config option3: " + this.config.driver);
-            this.log.info("config option4: " + this.config.option4);
+            this.log.info("config option4: " + this.config.channels_used);
             // we are ready, let's set the connection indicator
             this.setState("info.connection", true, true);
             //Initialize ioBrokers state objects if they dont exist
             //DMX CHANNELS contain and send DMX value 0-255 to a DMX channel
             // for (i=1;i<=DMX_CHANNELS_USED;i++){
-            for (let i = 2; i < 21; i++) {
+            for (let i = 2; i < this.config.channels_used; i++) {
                 // for (i:Number =1;i<=21;i++){
                 this.setObjectNotExists(this.GetDMX(i), {
                     type: 'state',
@@ -163,8 +171,8 @@ class nanodmx extends utils.Adapter {
             let portnumber = parseInt(portstring.substring(3));
             this.log.info(`number ${portnumber}`);
             this.log.info(`value ${state.val}`);
-            // this.mydmx.universe.update({11: state.val });   // <- geht
-            this.mydmx.universe.update({ [portnumber]: state.val }); // <-< geht nicht
+            // this.mydmx.universe.update({11: state.val });  
+            this.mydmx.universe.update({ [portnumber]: state.val });
             this.log.info('updated');
             // Küche 10-13 
         }
